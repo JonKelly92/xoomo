@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // Debug --------------------
     [SerializeField]
     private TextMeshProUGUI tiltInputText;
+    // -------------------------
 
     void Start()
     {
@@ -18,6 +20,6 @@ public class GameManager : MonoBehaviour
         // Accelerometer
         // Input.acceleration.x
 
-        tiltInputText.text = Input.acceleration.x.ToString();
+       // tiltInputText.text = Input.acceleration.x.ToString();
     }
 }

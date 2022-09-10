@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
@@ -21,6 +22,7 @@ public class PlayerValues
 
 public class ScoreManager : MonoBehaviour
 {
+
     public static ScoreManager Instance { get; private set; }
 
     private PlayerValues playerOne;
@@ -39,7 +41,10 @@ public class ScoreManager : MonoBehaviour
         playerOne = new PlayerValues();
         playerTwo = new PlayerValues();
 
-        // Send event to update the UI
+        // Send events to update the UI
+        UpdateOverallScoreEvent(playerOne);
+        UpdateTapScoreEvent(playerOne);
+        UpdateTiltScoreEvent(playerOne);
     }
 
     public void UpdateTiltScore(float score, GameObject playerObject)
@@ -55,21 +60,27 @@ public class ScoreManager : MonoBehaviour
         // Send event to update the UI
     }
 
-    public void UpdateTapScore(float score, GameObject playerObject)
+    public void UpdateTapScore(int score, GameObject playerObject)
     {
         PlayerValues player = IdentifyPlayer(playerObject);
-    }
 
+        player.currentTapScore += (score * 5); // x5 because it looks better than a double digit score
+        player.overallScore += player.currentTapScore; 
+
+        // Send event to update the UI
+        UpdateTapScoreEvent(player);
+        UpdateOverallScoreEvent(player);
+    }
 
     // Finds which player sent us data so we can update their score
     private PlayerValues IdentifyPlayer(GameObject playerObject)
     {
-        if (playerOne == null)
+        if (playerOne.playerGameObject == null)
         {
             playerOne.playerGameObject = playerObject;
             return playerOne;
         }
-        else if (playerTwo == null)
+        else if (playerTwo.playerGameObject == null)
         {
             playerTwo.playerGameObject = playerObject;
             return playerTwo;
@@ -83,6 +94,9 @@ public class ScoreManager : MonoBehaviour
             Debug.LogError("A third player has entered the game.");
             return null;
         }
-        
     }
+
+    private void UpdateTapScoreEvent(PlayerValues player) => EventManager.TapScoreUpdated(player.currentTapScore);
+    private void UpdateTiltScoreEvent(PlayerValues player) => EventManager.TiltScoreUpdate(player.currentTiltScore);
+    private void UpdateOverallScoreEvent(PlayerValues player) => EventManager.OverallScoreUpdated(player.overallScore);
 }
