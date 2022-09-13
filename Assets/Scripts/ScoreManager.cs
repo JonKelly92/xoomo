@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 
@@ -8,14 +5,12 @@ using UnityEngine;
 public class PlayerValues
 {
     public int currentTapScore;
-    public int currentTiltScore;
     public int overallScore;
     public GameObject playerGameObject;
 
     public PlayerValues()
     {
         currentTapScore = 0;
-        currentTiltScore = 0;
         overallScore = 0;
     }
 }
@@ -44,27 +39,13 @@ public class ScoreManager : MonoBehaviour
         // Send events to update the UI
         UpdateOverallScoreEvent(playerOne);
         UpdateTapScoreEvent(playerOne);
-        UpdateTiltScoreEvent(playerOne);
-    }
-
-    public void UpdateTiltScore(float score, GameObject playerObject)
-    {
-        PlayerValues player = IdentifyPlayer(playerObject);
-
-        // Calculate current score
-
-        // Calculate overall score
-
-        // Store score in player
-
-        // Send event to update the UI
     }
 
     public void UpdateTapScore(int score, GameObject playerObject)
     {
         PlayerValues player = IdentifyPlayer(playerObject);
 
-        player.currentTapScore += (score * 5); // x5 because it looks better than a double digit score
+        player.currentTapScore += (score * 5); // x5 because high numbers look better as a score
         player.overallScore += player.currentTapScore; 
 
         // Send event to update the UI
@@ -97,6 +78,5 @@ public class ScoreManager : MonoBehaviour
     }
 
     private void UpdateTapScoreEvent(PlayerValues player) => EventManager.TapScoreUpdated(player.currentTapScore);
-    private void UpdateTiltScoreEvent(PlayerValues player) => EventManager.TiltScoreUpdate(player.currentTiltScore);
     private void UpdateOverallScoreEvent(PlayerValues player) => EventManager.OverallScoreUpdated(player.overallScore);
 }

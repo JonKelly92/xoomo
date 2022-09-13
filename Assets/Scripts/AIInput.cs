@@ -9,10 +9,6 @@ public class AIInput : PlayerInput
     {
     }
 
-    protected override void SendTiltInput()
-    {
-        // ScoreManager.Instance.UpdateTiltScore();
-    }
     protected override void SendTapInput()
     {
         // ScoreManager.Instance.UpdateTapScore();
