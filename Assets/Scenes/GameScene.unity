@@ -321,7 +321,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1982d0e74583e84d803c002e4d6ffeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tiltInputText: {fileID: 2135304046}
 --- !u!4 &202581719
 Transform:
   m_ObjectHideFlags: 0
@@ -1228,6 +1227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1572782413}
+  leftButton: {fileID: 1655230122}
+  rightButton: {fileID: 455556100}
 --- !u!1 &2014877655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,8 +1273,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitForScoreUpdate: 30
-  leftButton: {fileID: 1655230122}
-  rightButton: {fileID: 455556100}
 --- !u!1 &2135304044
 GameObject:
   m_ObjectHideFlags: 0
