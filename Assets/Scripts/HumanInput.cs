@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class HumanInput : PlayerInput
 {
@@ -22,10 +21,6 @@ public class HumanInput : PlayerInput
 
         ClearScore();
         activeButton = AcceptInputFrom.None;
-    }
-
-    void Start()
-    {
     }
 
     private void OnDestroy()
@@ -118,7 +113,7 @@ public class HumanInput : PlayerInput
         rightTapCount++;
     }
 
-    private void ClearScore()
+    protected override void ClearScore()
     {
         frameCount = 0;
         totalTapCount = 0;
@@ -126,8 +121,6 @@ public class HumanInput : PlayerInput
         rightTapCount = 0;
     }
 
-    protected override void SendTapInput()
-    {
-        ScoreManager.Instance.UpdateTapScore(totalTapCount, gameObject);
-    }
+    protected override void SendTapInput() => EventManager.SendingTapCount(totalTapCount, location);
+
 }

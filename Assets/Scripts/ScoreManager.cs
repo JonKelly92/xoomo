@@ -6,12 +6,13 @@ public class PlayerValues
 {
     public int currentTapScore;
     public int overallScore;
-    public GameObject playerGameObject;
+    public Location location;
 
-    public PlayerValues()
+    public PlayerValues(Location location)
     {
         currentTapScore = 0;
         overallScore = 0;
+        this.location = location;
     }
 }
 
@@ -20,8 +21,8 @@ public class ScoreManager : MonoBehaviour
 
     public static ScoreManager Instance { get; private set; }
 
-    private PlayerValues playerOne;
-    private PlayerValues playerTwo;
+    private PlayerValues playerLeft;
+    private PlayerValues playerRight;
 
     private void Awake()
     {
@@ -29,66 +30,48 @@ public class ScoreManager : MonoBehaviour
             Destroy(this);
         else
             Instance = this;
+
+        EventManager.OnSendingTapCount += EventManager_OnSendingTapCount;
     }
 
-    void Start()
+    private void OnDestroy()
     {
-        playerOne = new PlayerValues();
-        playerTwo = new PlayerValues();
-
-        // Send events to update the UI
-        UpdateOverallScoreEvent(playerOne);
-        UpdateTapScoreEvent(playerOne);
+        EventManager.OnSendingTapCount -= EventManager_OnSendingTapCount;
     }
 
-    public void UpdateTapScore(int score, GameObject playerObject)
+    private void EventManager_OnSendingTapCount(int tapCount, Location location)
     {
-        PlayerValues player = IdentifyPlayer(playerObject);
+        if(location == Location.Left)
+        {
+            if(playerLeft == null)
+                playerLeft = new PlayerValues(location);
 
-        player.currentTapScore += (score * 5); // x5 because high numbers look better as a score
-        player.overallScore += player.currentTapScore; 
+            UpdateScore(tapCount, playerLeft);
+        }
+        else
+        {
+            if (playerRight == null)
+                playerRight = new PlayerValues(location);
 
-        // Send event to update the UI
+            UpdateScore(tapCount, playerRight);
+        }
+    }
+
+    private void UpdateScore(int tapCount, PlayerValues player)
+    {
+        player.currentTapScore += (tapCount * 5); // x5 because high numbers look better as a score
+        player.overallScore += player.currentTapScore;
+
         UpdateTapScoreEvent(player);
         UpdateOverallScoreEvent(player);
     }
 
-    // Finds which player sent us data so we can update their score
-    private PlayerValues IdentifyPlayer(GameObject playerObject)
-    {
-        if (playerOne.playerGameObject == null)
-        {
-            playerOne.playerGameObject = playerObject;
-            return playerOne;
-        }
-        else if (playerTwo.playerGameObject == null)
-        {
-            playerTwo.playerGameObject = playerObject;
-            return playerTwo;
-        }
-        else if (playerOne.playerGameObject == playerObject)
-            return playerOne;
-        else if (playerTwo.playerGameObject == playerObject)
-            return playerTwo;
-        else
-        {
-            Debug.LogError("A third player has entered the game.");
-            return null;
-        }
-    }
-
     private void UpdateTapScoreEvent(PlayerValues player)
     {
-        if (playerOne == player)
-            EventManager.TapScoreUpdated_PlayerOne(player.currentTapScore);
-        else if (playerTwo == player)
-            EventManager.TapScoreUpdated_PlayerTwo(player.currentTapScore);
+        EventManager.TapScoreUpdated(player.currentTapScore, player.location);
     }
     private void UpdateOverallScoreEvent(PlayerValues player)
     {
-        if (playerOne == player)
-            EventManager.OverallScoreUpdated_PlayerOne(player.overallScore);
-        else if (playerTwo == player)
-            EventManager.OverallScoreUpdated_PlayerTwo(player.overallScore);
+        EventManager.OverallScoreUpdated(player.overallScore, player.location);
     }
 }

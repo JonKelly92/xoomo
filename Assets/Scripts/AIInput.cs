@@ -20,8 +20,9 @@ public class AIInput : PlayerInput
 
     [SerializeField] private AIDifficulty aiDifficulty;
 
-    void Start()
+    protected override void  Start()
     {   
+        base.Start();
         ClearScore();
     }
 
@@ -36,11 +37,7 @@ public class AIInput : PlayerInput
             ClearScore();
         }
     }
-
-    protected override void SendTapInput()
-    {
-        ScoreManager.Instance.UpdateTapScore(totalTapCount, gameObject);
-    }
+    protected override void SendTapInput() => EventManager.SendingTapCount(totalTapCount, location);
 
     private void GetTapCount()
     {
@@ -49,22 +46,22 @@ public class AIInput : PlayerInput
         switch(aiDifficulty)
         {
             case AIDifficulty.Easy:
-                tapCount = UnityEngine.Random.Range(minTap_Easy, maxTap_Easy);
+                tapCount = Random.Range(minTap_Easy, maxTap_Easy);
                 break;
 
             case AIDifficulty.Normal:
-                tapCount = UnityEngine.Random.Range(minTap_Normal, maxTap_Normal);
+                tapCount = Random.Range(minTap_Normal, maxTap_Normal);
                 break;
 
             case AIDifficulty.Hard:
-                tapCount = UnityEngine.Random.Range(minTap_Hard, maxTap_Hard);
+                tapCount = Random.Range(minTap_Hard, maxTap_Hard);
                 break;
         }
 
         totalTapCount = tapCount;
     }
 
-    private void ClearScore()
+    protected override void ClearScore()
     {
         frameCount = 0;
         totalTapCount = 0;

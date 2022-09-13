@@ -3,18 +3,16 @@ using System;
 
 public class EventManager : MonoBehaviour
 {
-    public static event Action<int> OnTapScoreUpdate_PlayerOne;
-    public static event Action<int> OnOverallScoreUpdate_PlayerOne;
-    public static event Action<int> OnTapScoreUpdate_PlayerTwo;
-    public static event Action<int> OnOverallScoreUpdate_PlayerTwo;
+    public static event Action<int, Location> OnTapScoreUpdate;
+    public static event Action<int, Location> OnOverallScoreUpdate;
+    public static event Action<int, Location> OnSendingTapCount;
     public static event Action<GamePlayState> OnGamePlayStateChanged;
     public static event Action OnLeftButtonPressed;
     public static event Action OnRightButtonPressed;
 
-    public static void TapScoreUpdated_PlayerOne(int tapScore) => OnTapScoreUpdate_PlayerOne?.Invoke(tapScore);
-    public static void OverallScoreUpdated_PlayerOne(int overallScore) => OnOverallScoreUpdate_PlayerOne?.Invoke(overallScore);
-    public static void TapScoreUpdated_PlayerTwo(int tapScore) => OnTapScoreUpdate_PlayerTwo?.Invoke(tapScore);
-    public static void OverallScoreUpdated_PlayerTwo(int overallScore) => OnOverallScoreUpdate_PlayerTwo?.Invoke(overallScore);
+    public static void TapScoreUpdated(int tapScore, Location location) => OnTapScoreUpdate?.Invoke(tapScore, location);
+    public static void OverallScoreUpdated(int overallScore, Location location) => OnOverallScoreUpdate?.Invoke(overallScore, location);
+    public static void SendingTapCount(int tapCount, Location location) => OnSendingTapCount?.Invoke(tapCount, location);
 
     public static void GameplayStateChanged(GamePlayState gameplayState) => OnGamePlayStateChanged?.Invoke(gameplayState);
     public static void LeftButtonPressed() => OnLeftButtonPressed?.Invoke();
