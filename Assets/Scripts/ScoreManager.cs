@@ -77,6 +77,18 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    private void UpdateTapScoreEvent(PlayerValues player) => EventManager.TapScoreUpdated(player.currentTapScore);
-    private void UpdateOverallScoreEvent(PlayerValues player) => EventManager.OverallScoreUpdated(player.overallScore);
+    private void UpdateTapScoreEvent(PlayerValues player)
+    {
+        if (playerOne == player)
+            EventManager.TapScoreUpdated_PlayerOne(player.currentTapScore);
+        else if (playerTwo == player)
+            EventManager.TapScoreUpdated_PlayerTwo(player.currentTapScore);
+    }
+    private void UpdateOverallScoreEvent(PlayerValues player)
+    {
+        if (playerOne == player)
+            EventManager.OverallScoreUpdated_PlayerOne(player.overallScore);
+        else if (playerTwo == player)
+            EventManager.OverallScoreUpdated_PlayerTwo(player.overallScore);
+    }
 }
