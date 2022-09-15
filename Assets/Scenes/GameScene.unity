@@ -320,6 +320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1982d0e74583e84d803c002e4d6ffeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roundScoreCap: 130
   HumanPlayerPrefab: {fileID: 4871832846162352605, guid: 6161dca4cab1f0f4cba6e58915721d92, type: 3}
   AIPlayerPrefab: {fileID: 5159813043232544273, guid: 731fd911cee16a24ab4a4bf8ff2fdbb7, type: 3}
 --- !u!4 &202581719

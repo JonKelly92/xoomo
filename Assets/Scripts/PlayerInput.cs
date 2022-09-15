@@ -10,13 +10,30 @@ public abstract class PlayerInput : MonoBehaviour
 
     protected GamePlayState gamePlayState;
 
+    protected virtual void Awake()
+    {
+        EventManager.OnScoreCapReached += EventManager_OnScoreCapReached;
+        EventManager.OnGamePlayStateChangeCompleted += EventManager_OnGamePlayStateChangeCompleted;
+    }
+
     protected virtual void Start()
     {
-       playerObject = gameObject.GetComponent<PlayerObject>();
+        playerObject = gameObject.GetComponent<PlayerObject>();
 
         if (playerObject == null)
             Debug.LogError("player object is null");
     }
+
+
+    protected virtual void OnDestroy()
+    {
+        EventManager.OnScoreCapReached -= EventManager_OnScoreCapReached;
+        EventManager.OnGamePlayStateChangeCompleted -= EventManager_OnGamePlayStateChangeCompleted;
+    }
+
+    protected abstract void EventManager_OnGamePlayStateChangeCompleted();
+
+    protected abstract void EventManager_OnScoreCapReached(Location obj);
 
     protected abstract void SendTapInput();
     protected abstract  void ClearScore();

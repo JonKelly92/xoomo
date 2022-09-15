@@ -18,11 +18,14 @@ public class PlayerValues
 
 public class ScoreManager : MonoBehaviour
 {
-
     public static ScoreManager Instance { get; private set; }
 
     private PlayerValues playerLeft;
     private PlayerValues playerRight;
+
+    private int scoreCap;
+
+    private bool pauseScore;
 
     private void Awake()
     {
@@ -32,18 +35,30 @@ public class ScoreManager : MonoBehaviour
             Instance = this;
 
         EventManager.OnSendingTapCount += EventManager_OnSendingTapCount;
+        EventManager.OnScoreCapSet += EventManager_OnScoreCapSet;
+        EventManager.OnGamePlayStateChangeCompleted += EventManager_OnGamePlayStateChangeCompleted;
+
+        pauseScore = false;
     }
 
     private void OnDestroy()
     {
         EventManager.OnSendingTapCount -= EventManager_OnSendingTapCount;
+        EventManager.OnScoreCapSet -= EventManager_OnScoreCapSet;
+        EventManager.OnGamePlayStateChangeCompleted -= EventManager_OnGamePlayStateChangeCompleted;
     }
+
+    private void EventManager_OnScoreCapSet(int scoreCap) => this.scoreCap = scoreCap;
 
     private void EventManager_OnSendingTapCount(int tapCount, Location location)
     {
-        if(location == Location.Left)
+        // primarily used when switching between gameplay states
+        if (pauseScore)
+            return;
+
+        if (location == Location.Left)
         {
-            if(playerLeft == null)
+            if (playerLeft == null)
                 playerLeft = new PlayerValues(location);
 
             UpdateScore(tapCount, playerLeft);
@@ -64,6 +79,12 @@ public class ScoreManager : MonoBehaviour
 
         UpdateTapScoreEvent(player);
         UpdateOverallScoreEvent(player);
+
+        if (player.currentTapScore >= scoreCap)
+        {
+            pauseScore = true;
+            EventManager.ScoreCapReached(player.location);// this player has won the round
+        }
     }
 
     private void UpdateTapScoreEvent(PlayerValues player)
@@ -74,4 +95,16 @@ public class ScoreManager : MonoBehaviour
     {
         EventManager.OverallScoreUpdated(player.overallScore, player.location);
     }
+
+    private void EventManager_OnGamePlayStateChangeCompleted()
+    {
+        // starting a new round so reset the score
+        if (playerLeft != null)
+            playerLeft.currentTapScore = 0;
+        if (playerRight != null)
+            playerRight.currentTapScore = 0;
+
+        pauseScore = false;
+    }
+
 }

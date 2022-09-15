@@ -20,14 +20,21 @@ public class AIInput : PlayerInput
 
     [SerializeField] private AIDifficulty aiDifficulty;
 
-    protected override void  Start()
-    {   
+    private bool pauseTapCount;
+
+    protected override void Start()
+    {
         base.Start();
+        pauseTapCount = false;
         ClearScore();
     }
 
     private void FixedUpdate()
     {
+        // block "input", primarily for when rounds are changing and animations are happening
+        if (pauseTapCount)
+            return;
+
         frameCount++;
 
         if (frameCount >= waitForScoreUpdate)
@@ -37,13 +44,23 @@ public class AIInput : PlayerInput
             ClearScore();
         }
     }
+
+    // Round is starting
+    protected override void EventManager_OnGamePlayStateChangeCompleted()
+    {
+        ClearScore();
+        pauseTapCount = false;
+    }
+
+    protected override void EventManager_OnScoreCapReached(Location obj) => pauseTapCount = true;
+
     protected override void SendTapInput() => playerObject.SendTapCountEvent(totalTapCount);
 
     private void GetTapCount()
     {
         int tapCount = 0;
 
-        switch(aiDifficulty)
+        switch (aiDifficulty)
         {
             case AIDifficulty.Easy:
                 tapCount = Random.Range(minTap_Easy, maxTap_Easy);
