@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4871832846162352594}
   - component: {fileID: 4871832846162352595}
-  - component: {fileID: 4871832846162352592}
+  - component: {fileID: 1638561830392643041}
   m_Layer: 0
   m_Name: HumanPlayerInput
   m_TagString: Untagged
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitForScoreUpdate: 30
---- !u!114 &4871832846162352592
+--- !u!114 &1638561830392643041
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,6 +54,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4871832846162352605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00bb5c39d0cb2e04b847c95e0d2069c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 469055c544aa9bf468490ece4adfa4cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5159813043232544272}
   - component: {fileID: 5159813043232544275}
-  - component: {fileID: 5159813043232544274}
+  - component: {fileID: 3000387787460880807}
   m_Layer: 0
   m_Name: AIInput
   m_TagString: Untagged
@@ -52,7 +52,7 @@ MonoBehaviour:
   minTap_Hard: 4
   maxTap_Hard: 6
   aiDifficulty: 2
---- !u!114 &5159813043232544274
+--- !u!114 &3000387787460880807
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -61,6 +61,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5159813043232544273}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00bb5c39d0cb2e04b847c95e0d2069c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 469055c544aa9bf468490ece4adfa4cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

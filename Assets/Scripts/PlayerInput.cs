@@ -1,21 +1,21 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerLocation))]
+[RequireComponent(typeof(PlayerObject))]
 public abstract class PlayerInput : MonoBehaviour
 {
     [SerializeField] protected int waitForScoreUpdate = 30; // frames to wait before updating the score
     protected int frameCount; // how many frames have a passed since score was last updated
     protected int totalTapCount;
-    protected Location location;
+    protected PlayerObject playerObject;
 
     protected GamePlayState gamePlayState;
 
     protected virtual void Start()
     {
-        PlayerLocation playerLocation = gameObject.GetComponent<PlayerLocation>();
+       playerObject = gameObject.GetComponent<PlayerObject>();
 
-        if (playerLocation != null)
-            location = playerLocation.Location;
+        if (playerObject == null)
+            Debug.LogError("player object is null");
     }
 
     protected abstract void SendTapInput();

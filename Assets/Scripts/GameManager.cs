@@ -20,8 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject HumanPlayerPrefab;
     [SerializeField] private GameObject AIPlayerPrefab;
 
-    private GameObject playerLeft;
-    private GameObject playerRight;
+    private PlayerObject playerLeft;
+    private PlayerObject playerRight;
 
     // TODO :
     // Change gameplay state when appropriate
@@ -35,23 +35,20 @@ public class GameManager : MonoBehaviour
         else
             Instance = this;
 
-        playerLeft = Instantiate(HumanPlayerPrefab, Vector3.zero, Quaternion.identity);
-        PlayerLocation playerLocation = playerLeft.GetComponent<PlayerLocation>();
-        if (playerLocation != null)
-            playerLocation.Location = Location.Left;
+        GameObject leftPlayerObject = Instantiate(HumanPlayerPrefab, Vector3.zero, Quaternion.identity);
+        playerLeft = leftPlayerObject.GetComponent<PlayerObject>();
+        if (playerLeft != null)
+            playerLeft.Location = Location.Left;
 
-        playerLocation = null;
-
-        playerRight = Instantiate(AIPlayerPrefab, Vector3.zero, Quaternion.identity);
-        playerLocation = playerRight.GetComponent<PlayerLocation>();
-        if (playerLocation != null)
-            playerLocation.Location = Location.Right;
+        GameObject rightPlayerObject = Instantiate(AIPlayerPrefab, Vector3.zero, Quaternion.identity);
+        playerRight = rightPlayerObject.GetComponent<PlayerObject>();
+        if (playerRight != null)
+            playerRight.Location = Location.Right;
     }
 
     private void Start()
     {
         // Debug -------------------------
-
         EventManager.GameplayStateChanged(GamePlayState.Center);
         // --------------------------
     }

@@ -37,7 +37,7 @@ public class AIInput : PlayerInput
             ClearScore();
         }
     }
-    protected override void SendTapInput() => EventManager.SendingTapCount(totalTapCount, location);
+    protected override void SendTapInput() => playerObject.SendTapCountEvent(totalTapCount);
 
     private void GetTapCount()
     {

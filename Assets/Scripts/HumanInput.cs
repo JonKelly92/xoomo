@@ -1,4 +1,3 @@
-using UnityEngine;
 
 public class HumanInput : PlayerInput
 {
@@ -121,6 +120,6 @@ public class HumanInput : PlayerInput
         rightTapCount = 0;
     }
 
-    protected override void SendTapInput() => EventManager.SendingTapCount(totalTapCount, location);
+    protected override void SendTapInput() => playerObject.SendTapCountEvent(totalTapCount);
 
 }
