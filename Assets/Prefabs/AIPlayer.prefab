@@ -160,9 +160,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbb9c8ef251bc31489d6369fe65e30c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position_Center_LeftPlayer: {fileID: 0}
-  position_Left_LeftPlayer: {fileID: 0}
-  position_Right_LeftPlayer: {fileID: 0}
-  position_Center_RightPlayer: {fileID: 0}
-  position_Left_RightPlayer: {fileID: 0}
-  position_Right_RightPlayer: {fileID: 0}
+  speed: 5

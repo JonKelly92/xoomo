@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 public class HumanInput : PlayerInput
 {
     private enum AcceptInputFrom
@@ -69,6 +71,14 @@ public class HumanInput : PlayerInput
         // block all input
         if (activeButton == AcceptInputFrom.None)
             return;
+
+        // DEBUG -----------------------------
+        if (Input.GetKeyDown(KeyCode.Z))
+            leftTapCount += 5;
+        else if (Input.GetKeyDown(KeyCode.M))
+            rightTapCount += 5;
+        //----------------------------------------
+
 
         if (gamePlayState == GamePlayState.Left)
         {

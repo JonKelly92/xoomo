@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "9ASAX0LZSF",
         "name": "com.jonkelly.xoomo",
-        "processId": 2494,
+        "processId": 19662,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -36,6 +36,12 @@
             "deviceId": "9ASAX0LZSF",
             "name": "com.jonkelly.xoomo",
             "processId": 2494,
+            "exited": false
+        },
+        {
+            "deviceId": "9ASAX0LZSF",
+            "name": "com.jonkelly.xoomo",
+            "processId": 19662,
             "exited": false
         }
     ],
