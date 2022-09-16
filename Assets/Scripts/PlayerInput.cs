@@ -24,7 +24,6 @@ public abstract class PlayerInput : MonoBehaviour
             Debug.LogError("player object is null");
     }
 
-
     protected virtual void OnDestroy()
     {
         EventManager.OnScoreCapReached -= EventManager_OnScoreCapReached;

@@ -12,6 +12,7 @@ public class EventManager : MonoBehaviour
     public static event Action OnGamePlayStateChangeCompleted; // using this allows time for the animation to complete before beginning to record score again
     public static event Action OnLeftButtonPressed;
     public static event Action OnRightButtonPressed;
+    public static event Action<Location> OnGameOver; // game has ended, location is to determine which player has won (left or right)
 
     public static void ScoreCapSet(int scoreCape) => OnScoreCapSet?.Invoke(scoreCape);
     public static void ScoreCapReached(Location location) => OnScoreCapReached?.Invoke(location);
@@ -23,4 +24,6 @@ public class EventManager : MonoBehaviour
     public static void GamePlayStateChangeCompleted() => OnGamePlayStateChangeCompleted?.Invoke();
     public static void LeftButtonPressed() => OnLeftButtonPressed?.Invoke();
     public static void RightButtonPressed() => OnRightButtonPressed?.Invoke();
+
+    public static void GameOver(Location location) => OnGameOver?.Invoke(location);
 }

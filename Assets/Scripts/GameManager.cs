@@ -71,16 +71,11 @@ public class GameManager : MonoBehaviour
         EventManager.GameplayStateChanged(state);
 
         // DEBUG -------------------------------------
-        Debug.Log("Game play state: " + currentGamePlayState.ToString());
+        //Debug.Log("Game play state: " + currentGamePlayState.ToString());
     }
 
     private void EventManager_OnScoreCapReached(Location location)
     {
-        // TODO :
-        // if the current game play state is Left (right player has advantage)
-        // && the location being passed is Right
-        // then the Right player has won
-
         if (currentGamePlayState == GamePlayState.Center)
         {
             if (location == Location.Left)// Left player won the round so we move to the right for the next round
@@ -90,7 +85,16 @@ public class GameManager : MonoBehaviour
         }
         else if (currentGamePlayState == GamePlayState.Right || currentGamePlayState == GamePlayState.Left)
         {
-            SetGamePlayState(GamePlayState.Center);
+            // if the current game play state is Left (right player has advantage)
+            // && the location being passed is Right (right player also won the current round)
+            // then the Right player has won the match
+            if (currentGamePlayState == GamePlayState.Left && location == Location.Right ||
+                currentGamePlayState == GamePlayState.Right && location == Location.Left)
+            {
+                EventManager.GameOver(location);
+            }
+            else
+                SetGamePlayState(GamePlayState.Center);
         }
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI gameOverText;
+
     [SerializeField] private TextMeshProUGUI score_Center_LeftPlayer;
     [SerializeField] private TextMeshProUGUI score_Center_RightPlayer;
 
@@ -23,6 +25,7 @@ public class UIManager : MonoBehaviour
         EventManager.OnTapScoreUpdate += EventManager_OnTapScoreUpdate;
         EventManager.OnOverallScoreUpdate += EventManager_OnOverallScoreUpdate;
         EventManager.OnGamePlayStateChanged += EventManager_OnGamePlayStateChanged;
+        EventManager.OnGameOver += EventManager_OnGameOver;
 
         leftButton.onClick.AddListener(LeftBtnPress);
         rightButton.onClick.AddListener(RightBtnPress);
@@ -33,6 +36,7 @@ public class UIManager : MonoBehaviour
         EventManager.OnTapScoreUpdate -= EventManager_OnTapScoreUpdate;
         EventManager.OnOverallScoreUpdate -= EventManager_OnOverallScoreUpdate;
         EventManager.OnGamePlayStateChanged -= EventManager_OnGamePlayStateChanged;
+        EventManager.OnGameOver -= EventManager_OnGameOver;
 
         leftButton.onClick.RemoveAllListeners();
         rightButton.onClick.RemoveAllListeners();
@@ -55,8 +59,6 @@ public class UIManager : MonoBehaviour
         score_Right_LeftPlayer.gameObject.SetActive(false);
         score_Right_RightPlayer.gameObject.SetActive(false);
 
-        Debug.Log("No Null");
-
         switch (state)
         {
             case GamePlayState.Center:
@@ -74,6 +76,8 @@ public class UIManager : MonoBehaviour
                 score_Right_RightPlayer.gameObject.SetActive(true);
                 break;
         }
+
+        ResetScores();
 
         EventManager.GamePlayStateChangeCompleted();
         // ---------------------
@@ -119,6 +123,23 @@ public class UIManager : MonoBehaviour
 
         // ---------------------------------------------
 
+    }
+
+    private void EventManager_OnGameOver(Location location)
+    {
+        // GAME OVER
+
+        gameOverText.gameObject.SetActive(true); 
+    }
+
+    private void ResetScores()
+    {
+        score_Center_LeftPlayer.text = "0";
+        score_Center_RightPlayer.text = "0";
+        score_Left_LeftPlayer.text = "0";
+        score_Left_RightPlayer.text = "0";
+        score_Right_LeftPlayer.text = "0";
+        score_Right_RightPlayer.text = "0";
     }
 
     private void LeftBtnPress() => EventManager.LeftButtonPressed();
