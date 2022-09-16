@@ -2,8 +2,8 @@
     "m_SelectedDeviceId": "9ASAX0LZSF",
     "m_SelectedPackage": {
         "deviceId": "9ASAX0LZSF",
-        "name": "com.DefaultCompany.com.unity.template.mobile2D",
-        "processId": 4926,
+        "name": "com.jonkelly.xoomo",
+        "processId": 2494,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -24,6 +24,18 @@
             "deviceId": "9ASAX0LZSF",
             "name": "com.DefaultCompany.com.unity.template.mobile2D",
             "processId": 4926,
+            "exited": false
+        },
+        {
+            "deviceId": "9ASAX0LZSF",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 28774,
+            "exited": false
+        },
+        {
+            "deviceId": "9ASAX0LZSF",
+            "name": "com.jonkelly.xoomo",
+            "processId": 2494,
             "exited": false
         }
     ],

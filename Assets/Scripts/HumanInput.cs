@@ -34,7 +34,7 @@ public class HumanInput : PlayerInput
     }
 
     // Round has ended and the new game play state is being chosen, block input while this is happening
-    protected override void EventManager_OnScoreCapReached(Location obj) => activeButton = AcceptInputFrom.None;
+    protected override void EventManager_OnScoreCapReached(PlayerSide obj) => activeButton = AcceptInputFrom.None;
 
     private void EventManager_OnGamePlayStateChanged(GamePlayState state) => gamePlayState = state;
 

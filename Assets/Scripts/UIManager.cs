@@ -79,18 +79,18 @@ public class UIManager : MonoBehaviour
 
         ResetScores();
 
-        EventManager.GamePlayStateChangeCompleted();
+        //EventManager.GamePlayStateChangeCompleted();
         // ---------------------
     }
 
-    private void EventManager_OnOverallScoreUpdate(int overallScore, Location location)
+    private void EventManager_OnOverallScoreUpdate(int overallScore, PlayerSide location)
     {
     }
-    private void EventManager_OnTapScoreUpdate(int tapScore, Location location)
+    private void EventManager_OnTapScoreUpdate(int tapScore, PlayerSide location)
     {
         // DEBUG: using text meshes to test the code before adding in more complex UI elements
 
-        if (location == Location.Left)
+        if (location == PlayerSide.Left)
         {
             switch(gamePlayState)
             {
@@ -105,7 +105,7 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
-        else if (location == Location.Right)
+        else if (location == PlayerSide.Right)
         {
             switch (gamePlayState)
             {
@@ -125,7 +125,7 @@ public class UIManager : MonoBehaviour
 
     }
 
-    private void EventManager_OnGameOver(Location location)
+    private void EventManager_OnGameOver(PlayerSide location)
     {
         // GAME OVER
 

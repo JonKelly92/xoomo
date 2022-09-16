@@ -7,7 +7,7 @@ public enum GamePlayState
     Right = 3
 }
 
-public enum Location
+public enum PlayerSide
 {
     Left = 1,
     Right = 2
@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
 
     private GamePlayState currentGamePlayState;
 
+    private int animationsInProgress;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,14 +39,18 @@ public class GameManager : MonoBehaviour
         GameObject leftPlayerObject = Instantiate(HumanPlayerPrefab, Vector3.zero, Quaternion.identity);
         playerLeft = leftPlayerObject.GetComponent<PlayerObject>();
         if (playerLeft != null)
-            playerLeft.Location = Location.Left;
+            playerLeft.Location = PlayerSide.Left;
 
         GameObject rightPlayerObject = Instantiate(AIPlayerPrefab, Vector3.zero, Quaternion.identity);
         playerRight = rightPlayerObject.GetComponent<PlayerObject>();
         if (playerRight != null)
-            playerRight.Location = Location.Right;
+            playerRight.Location = PlayerSide.Right;
 
         EventManager.OnScoreCapReached += EventManager_OnScoreCapReached;
+        EventManager.OnAnimationStarted += EventManager_OnAnimationStarted;
+        EventManager.OnAnimationEnded += EventManager_OnAnimationEnded;
+
+        animationsInProgress = 0;
     }
 
     private void Start()
@@ -57,6 +63,8 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         EventManager.OnScoreCapReached -= EventManager_OnScoreCapReached;
+        EventManager.OnAnimationStarted -= EventManager_OnAnimationStarted;
+        EventManager.OnAnimationEnded -= EventManager_OnAnimationEnded;
     }
 
     private void StartNewGame()
@@ -74,11 +82,11 @@ public class GameManager : MonoBehaviour
         //Debug.Log("Game play state: " + currentGamePlayState.ToString());
     }
 
-    private void EventManager_OnScoreCapReached(Location location)
+    private void EventManager_OnScoreCapReached(PlayerSide location)
     {
         if (currentGamePlayState == GamePlayState.Center)
         {
-            if (location == Location.Left)// Left player won the round so we move to the right for the next round
+            if (location == PlayerSide.Left)// Left player won the round so we move to the right for the next round
                 SetGamePlayState(GamePlayState.Right);
             else
                 SetGamePlayState(GamePlayState.Left);
@@ -88,13 +96,28 @@ public class GameManager : MonoBehaviour
             // if the current game play state is Left (right player has advantage)
             // && the location being passed is Right (right player also won the current round)
             // then the Right player has won the match
-            if (currentGamePlayState == GamePlayState.Left && location == Location.Right ||
-                currentGamePlayState == GamePlayState.Right && location == Location.Left)
+            if (currentGamePlayState == GamePlayState.Left && location == PlayerSide.Right ||
+                currentGamePlayState == GamePlayState.Right && location == PlayerSide.Left)
             {
                 EventManager.GameOver(location);
             }
             else
                 SetGamePlayState(GamePlayState.Center);
         }
+    }
+
+    private void EventManager_OnAnimationStarted()
+    {
+        animationsInProgress++;
+    }
+
+    private void EventManager_OnAnimationEnded()
+    {
+        animationsInProgress--;
+
+        if (animationsInProgress == 0)
+            EventManager.GamePlayStateChangeCompleted();
+        else if (animationsInProgress < 0)
+            Debug.LogError("More animations have finished than were started"); // just in case, save some headaches later
     }
 }

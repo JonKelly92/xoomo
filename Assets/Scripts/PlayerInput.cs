@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerObject))]
 public abstract class PlayerInput : MonoBehaviour
 {
     [SerializeField] protected int waitForScoreUpdate = 30; // frames to wait before updating the score
@@ -21,7 +20,7 @@ public abstract class PlayerInput : MonoBehaviour
         playerObject = gameObject.GetComponent<PlayerObject>();
 
         if (playerObject == null)
-            Debug.LogError("player object is null");
+            Debug.LogError("PlayerObject is null");
     }
 
     protected virtual void OnDestroy()
@@ -32,7 +31,7 @@ public abstract class PlayerInput : MonoBehaviour
 
     protected abstract void EventManager_OnGamePlayStateChangeCompleted();
 
-    protected abstract void EventManager_OnScoreCapReached(Location obj);
+    protected abstract void EventManager_OnScoreCapReached(PlayerSide obj);
 
     protected abstract void SendTapInput();
     protected abstract  void ClearScore();

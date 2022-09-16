@@ -6,9 +6,9 @@ public class PlayerValues
 {
     public int currentTapScore;
     public int overallScore;
-    public Location location;
+    public PlayerSide location;
 
-    public PlayerValues(Location location)
+    public PlayerValues(PlayerSide location)
     {
         currentTapScore = 0;
         overallScore = 0;
@@ -50,13 +50,13 @@ public class ScoreManager : MonoBehaviour
 
     private void EventManager_OnScoreCapSet(int scoreCap) => this.scoreCap = scoreCap;
 
-    private void EventManager_OnSendingTapCount(int tapCount, Location location)
+    private void EventManager_OnSendingTapCount(int tapCount, PlayerSide location)
     {
         // primarily used when switching between gameplay states
         if (pauseScore)
             return;
 
-        if (location == Location.Left)
+        if (location == PlayerSide.Left)
         {
             if (playerLeft == null)
                 playerLeft = new PlayerValues(location);

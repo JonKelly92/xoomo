@@ -52,7 +52,7 @@ public class AIInput : PlayerInput
         pauseTapCount = false;
     }
 
-    protected override void EventManager_OnScoreCapReached(Location obj) => pauseTapCount = true;
+    protected override void EventManager_OnScoreCapReached(PlayerSide obj) => pauseTapCount = true;
 
     protected override void SendTapInput() => playerObject.SendTapCountEvent(totalTapCount);
 
