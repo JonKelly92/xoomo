@@ -2,8 +2,6 @@ using UnityEngine;
 
 public abstract class PlayerInput : MonoBehaviour
 {
-    [SerializeField] protected int waitForScoreUpdate = 30; // frames to wait before updating the score
-    protected int frameCount; // how many frames have a passed since score was last updated
     protected int totalTapCount;
     protected PlayerObject playerObject;
 
@@ -13,6 +11,7 @@ public abstract class PlayerInput : MonoBehaviour
     {
         EventManager.OnScoreCapReached += EventManager_OnScoreCapReached;
         EventManager.OnGamePlayStateChangeCompleted += EventManager_OnGamePlayStateChangeCompleted;
+        EventManager.OnGameOver += EventManager_OnGameOver;
     }
 
     protected virtual void Start()
@@ -27,11 +26,14 @@ public abstract class PlayerInput : MonoBehaviour
     {
         EventManager.OnScoreCapReached -= EventManager_OnScoreCapReached;
         EventManager.OnGamePlayStateChangeCompleted -= EventManager_OnGamePlayStateChangeCompleted;
+        EventManager.OnGameOver -= EventManager_OnGameOver;
     }
 
     protected abstract void EventManager_OnGamePlayStateChangeCompleted();
 
     protected abstract void EventManager_OnScoreCapReached(PlayerSide obj);
+
+    protected abstract void EventManager_OnGameOver(PlayerSide obj);
 
     protected abstract void SendTapInput();
     protected abstract  void ClearScore();

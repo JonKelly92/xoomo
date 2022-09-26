@@ -128,13 +128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a8b8bd86887f949b9f34dbb704d988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitForScoreUpdate: 30
-  minTap_Easy: 0
-  maxTap_Easy: 2
-  minTap_Normal: 2
-  maxTap_Normal: 4
-  minTap_Hard: 4
-  maxTap_Hard: 6
+  timeBetweenTaps_Easy: 0.4
+  timeBetweenTaps_Normal: 0.25
+  timeBetweenTaps_Hard: 0.1
   aiDifficulty: 2
 --- !u!114 &3000387787460880807
 MonoBehaviour:

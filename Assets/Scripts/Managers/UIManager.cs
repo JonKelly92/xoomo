@@ -62,10 +62,6 @@ public class UIManager : MonoBehaviour
     {
         gamePlayState = state;
 
-        // TODO: move players to Left or Right or Center based on the game state
-        // possibly have an animation
-        // send GamePlayStateChangeCompleted when the ui is ready for the game to continue
-
         // DEBUG --------------
 
         score_Center_LeftPlayer.gameObject.SetActive(false);
@@ -94,8 +90,6 @@ public class UIManager : MonoBehaviour
         }
 
         ResetScores();
-
-        //EventManager.GamePlayStateChangeCompleted();
         // ---------------------
     }
 

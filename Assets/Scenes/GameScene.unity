@@ -566,7 +566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundScoreCap: 90
-  gamePlayTimer: 10
+  gamePlayTimer: 45
   HumanPlayerPrefab: {fileID: 4871832846162352605, guid: 6161dca4cab1f0f4cba6e58915721d92, type: 3}
   AIPlayerPrefab: {fileID: 5159813043232544273, guid: 731fd911cee16a24ab4a4bf8ff2fdbb7, type: 3}
 --- !u!4 &202581719

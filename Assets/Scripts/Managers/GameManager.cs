@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // DEBUG ---------------
+        // DEBUG --------------- Not sure if I'm going to keep this here
         StartNewGame();
         // ---------------------
     }

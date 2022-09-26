@@ -73,10 +73,10 @@ public class HumanInput : PlayerInput
             return;
 
         // DEBUG -----------------------------
-        if (Input.GetKeyDown(KeyCode.Z))
-            leftTapCount += 5;
-        else if (Input.GetKeyDown(KeyCode.M))
-            rightTapCount += 5;
+        if (Input.GetKey(KeyCode.Z))
+            leftTapCount += 1;
+        else if (Input.GetKey(KeyCode.M))
+            rightTapCount += 1;
         //----------------------------------------
 
 
@@ -113,13 +113,8 @@ public class HumanInput : PlayerInput
             rightTapCount = 0;
         }
 
-        frameCount++;
-
-        if (frameCount >= waitForScoreUpdate)
-        {
-            SendTapInput();
-            ClearScore();
-        }
+        SendTapInput();
+        ClearScore();
     }
 
     private void LeftBtnPress()
@@ -134,9 +129,10 @@ public class HumanInput : PlayerInput
 
     protected override void ClearScore()
     {
-        frameCount = 0;
         totalTapCount = 0;
         leftTapCount = 0;
         rightTapCount = 0;
     }
+
+    protected override void EventManager_OnGameOver(PlayerSide obj) => activeButton = AcceptInputFrom.None;
 }
