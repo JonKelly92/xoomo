@@ -6,13 +6,13 @@ public class PlayerValues
 {
     public int currentTapScore;
     public int overallScore;
-    public PlayerSide location;
+    public PlayerSide playerSide;
 
-    public PlayerValues(PlayerSide location)
+    public PlayerValues(PlayerSide playerSide)
     {
         currentTapScore = 0;
         overallScore = 0;
-        this.location = location;
+        this.playerSide = playerSide;
     }
 }
 
@@ -83,17 +83,17 @@ public class ScoreManager : MonoBehaviour
         if (player.currentTapScore >= scoreCap)
         {
             pauseScore = true;
-            EventManager.ScoreCapReached(player.location);// this player has won the round
+            EventManager.ScoreCapReached(player.playerSide);// this player has won the round
         }
     }
 
     private void UpdateTapScoreEvent(PlayerValues player)
     {
-        EventManager.TapScoreUpdated(player.currentTapScore, player.location);
+        EventManager.TapScoreUpdated(player.currentTapScore, player.playerSide);
     }
     private void UpdateOverallScoreEvent(PlayerValues player)
     {
-        EventManager.OverallScoreUpdated(player.overallScore, player.location);
+        EventManager.OverallScoreUpdated(player.overallScore, player.playerSide);
     }
 
     private void EventManager_OnGamePlayStateChangeCompleted()
@@ -107,4 +107,11 @@ public class ScoreManager : MonoBehaviour
         pauseScore = false;
     }
 
+    public PlayerSide GetWinnerByScore()
+    {
+        if (playerLeft.overallScore > playerRight.overallScore)
+            return PlayerSide.Left;
+        else
+            return PlayerSide.Right;
+    }
 }

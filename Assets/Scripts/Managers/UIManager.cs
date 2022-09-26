@@ -1,10 +1,15 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI gameOverText;
+    public static UIManager Instance { get; private set; }
+
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button exitButton;
 
     [SerializeField] private TextMeshProUGUI score_Center_LeftPlayer;
     [SerializeField] private TextMeshProUGUI score_Center_RightPlayer;
@@ -18,10 +23,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button leftButton;
     [SerializeField] private Button rightButton;
 
+    [SerializeField] private TextMeshProUGUI gameplayTimer; // this timer counts the seconds until the game ends
+
     private GamePlayState gamePlayState;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+            Destroy(this);
+        else
+            Instance = this;
+
         EventManager.OnTapScoreUpdate += EventManager_OnTapScoreUpdate;
         EventManager.OnOverallScoreUpdate += EventManager_OnOverallScoreUpdate;
         EventManager.OnGamePlayStateChanged += EventManager_OnGamePlayStateChanged;
@@ -29,6 +41,8 @@ public class UIManager : MonoBehaviour
 
         leftButton.onClick.AddListener(LeftBtnPress);
         rightButton.onClick.AddListener(RightBtnPress);
+        restartButton.onClick.AddListener(RestartGame);
+        exitButton.onClick.AddListener(ExitToMainMenu);
     }
 
     private void OnDestroy()
@@ -40,6 +54,8 @@ public class UIManager : MonoBehaviour
 
         leftButton.onClick.RemoveAllListeners();
         rightButton.onClick.RemoveAllListeners();
+        restartButton.onClick.RemoveAllListeners();
+        exitButton.onClick.RemoveAllListeners();
     }
 
     private void EventManager_OnGamePlayStateChanged(GamePlayState state)
@@ -88,11 +104,11 @@ public class UIManager : MonoBehaviour
     }
     private void EventManager_OnTapScoreUpdate(int tapScore, PlayerSide location)
     {
-        // DEBUG: using text meshes to test the code before adding in more complex UI elements
+        // DEBUG: using text meshes to test the code before adding in more complex UI elements ---------------
 
         if (location == PlayerSide.Left)
         {
-            switch(gamePlayState)
+            switch (gamePlayState)
             {
                 case GamePlayState.Center:
                     score_Center_LeftPlayer.text = tapScore.ToString();
@@ -125,12 +141,20 @@ public class UIManager : MonoBehaviour
 
     }
 
-    private void EventManager_OnGameOver(PlayerSide location)
+    public void UpdateGamePlayTimer(string formattedTime)
     {
-        // GAME OVER
-
-        gameOverText.gameObject.SetActive(true); 
+        gameplayTimer.SetText(formattedTime);
     }
+
+    public void UpdatePreGameTimer(string formattedTime)
+    {
+
+    }
+
+    private void EventManager_OnGameOver(PlayerSide location) => gameOverPanel.SetActive(true);
+
+    private void RestartGame() => EventManager.RestartGame();
+    private void ExitToMainMenu() => EventManager.ExitToMainMenu();
 
     private void ResetScores()
     {
