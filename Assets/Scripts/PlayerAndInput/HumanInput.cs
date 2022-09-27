@@ -18,7 +18,7 @@ public class HumanInput : PlayerInput
     {
         base.Awake();
 
-        EventManager.OnGamePlayStateChanged += EventManager_OnGamePlayStateChanged;
+        EventManager.OnGameplayStateChanged += EventManager_OnGamePlayStateChanged;
         EventManager.OnLeftButtonPressed += LeftBtnPress;
         EventManager.OnRightButtonPressed += RightBtnPress;
 
@@ -30,7 +30,7 @@ public class HumanInput : PlayerInput
     {
         base.OnDestroy();
 
-        EventManager.OnGamePlayStateChanged -= EventManager_OnGamePlayStateChanged;
+        EventManager.OnGameplayStateChanged -= EventManager_OnGamePlayStateChanged;
         EventManager.OnLeftButtonPressed -= LeftBtnPress;
         EventManager.OnRightButtonPressed -= RightBtnPress;
     }
@@ -38,7 +38,7 @@ public class HumanInput : PlayerInput
     // Round has ended and the new game play state is being chosen, block input while this is happening
     protected override void EventManager_OnScoreCapReached(PlayerSide obj) => activeButton = AcceptInputFrom.None;
 
-    private void EventManager_OnGamePlayStateChanged(GamePlayState state) => gamePlayState = state;
+    private void EventManager_OnGamePlayStateChanged(GameplayState state) => gamePlayState = state;
 
     // A new round is starting
     protected override void EventManager_OnGamePlayStateChangeCompleted()
@@ -48,13 +48,13 @@ public class HumanInput : PlayerInput
         // Setting the state now so we can immediately start recieving input
         switch (gamePlayState)
         {
-            case GamePlayState.Left:
+            case GameplayState.Left:
                 activeButton = AcceptInputFrom.LeftBtn;
                 break;
-            case GamePlayState.Right:
+            case GameplayState.Right:
                 activeButton = AcceptInputFrom.RightBtn;
                 break;
-            case GamePlayState.Center:
+            case GameplayState.Center:
                 activeButton = AcceptInputFrom.LeftBtn;
                 break;
             default:
@@ -80,18 +80,18 @@ public class HumanInput : PlayerInput
         //----------------------------------------
 
 
-        if (gamePlayState == GamePlayState.Left)
+        if (gamePlayState == GameplayState.Left)
         {
             totalTapCount += leftTapCount;
             leftTapCount = 0;
         }
-        else if (gamePlayState == GamePlayState.Right)
+        else if (gamePlayState == GameplayState.Right)
         {
             totalTapCount += rightTapCount;
             rightTapCount = 0;
         }
         // In the Center state the player needs to alternate between pressing the Left and Right buttons
-        else if (gamePlayState == GamePlayState.Center)
+        else if (gamePlayState == GameplayState.Center)
         {
             if (activeButton == AcceptInputFrom.LeftBtn)
             {

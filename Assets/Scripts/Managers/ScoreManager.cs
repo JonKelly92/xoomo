@@ -36,7 +36,7 @@ public class ScoreManager : MonoBehaviour
 
         EventManager.OnSendingTapCount += EventManager_OnSendingTapCount;
         EventManager.OnScoreCapSet += EventManager_OnScoreCapSet;
-        EventManager.OnGamePlayStateChangeCompleted += EventManager_OnGamePlayStateChangeCompleted;
+        EventManager.OnGameplayStateChangeCompleted += EventManager_OnGamePlayStateChangeCompleted;
 
         pauseScore = false;
     }
@@ -45,7 +45,7 @@ public class ScoreManager : MonoBehaviour
     {
         EventManager.OnSendingTapCount -= EventManager_OnSendingTapCount;
         EventManager.OnScoreCapSet -= EventManager_OnScoreCapSet;
-        EventManager.OnGamePlayStateChangeCompleted -= EventManager_OnGamePlayStateChangeCompleted;
+        EventManager.OnGameplayStateChangeCompleted -= EventManager_OnGamePlayStateChangeCompleted;
     }
 
     private void EventManager_OnScoreCapSet(int scoreCap) => this.scoreCap = scoreCap;

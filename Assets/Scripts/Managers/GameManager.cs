@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum GamePlayState
+public enum GameplayState
 {
     Left = 1,
     Center = 2,
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     private PlayerObject playerLeft;
     private PlayerObject playerRight;
 
-    private GamePlayState currentGamePlayState;
+    private GameplayState currentGamePlayState;
 
     private int animationsInProgress;
 
@@ -56,16 +56,15 @@ public class GameManager : MonoBehaviour
         EventManager.OnAnimationEnded += EventManager_OnAnimationEnded;
         EventManager.OnRestartGame += EventManager_OnRestartGame;
         EventManager.OnExitToMainMenu += EventManager_OnExitToMainMenu;
-        EventManager.OnGamePlayTimerEnd += EventManager_OnGamePlayTimerEnd;
+        EventManager.OnGameplayTimerEnd += EventManager_OnGamePlayTimerEnd;
+        EventManager.OnPreGameTimerEnd += EventManager_OnPreGameTimerEnd;
 
         animationsInProgress = 0;
     }
 
     private void Start()
     {
-        // DEBUG --------------- Not sure if I'm going to keep this here
-        StartNewGame();
-        // ---------------------
+        EventManager.PreGameTimerStart(3);
     }
 
     private void OnDestroy()
@@ -75,19 +74,25 @@ public class GameManager : MonoBehaviour
         EventManager.OnAnimationEnded -= EventManager_OnAnimationEnded;
         EventManager.OnRestartGame -= EventManager_OnRestartGame;
         EventManager.OnExitToMainMenu -= EventManager_OnExitToMainMenu;
-        EventManager.OnGamePlayTimerEnd -= EventManager_OnGamePlayTimerEnd;
+        EventManager.OnGameplayTimerEnd -= EventManager_OnGamePlayTimerEnd;
+        EventManager.OnPreGameTimerEnd -= EventManager_OnPreGameTimerEnd;
+    }
+
+    private void EventManager_OnPreGameTimerEnd()
+    {
+        StartNewGame();
     }
 
     private void StartNewGame()
     {
         EventManager.ScoreCapSet(roundScoreCap); ;
-        SetGamePlayState(GamePlayState.Center);
+        SetGamePlayState(GameplayState.Center);
 
         // DEBUG ---------------- Actually needs to start after the pre game timer 
         EventManager.GamePlayTimerStart(gamePlayTimer);
     }
 
-    private void SetGamePlayState(GamePlayState state)
+    private void SetGamePlayState(GameplayState state)
     {
         currentGamePlayState = state;
         EventManager.GameplayStateChanged(state);
@@ -95,25 +100,25 @@ public class GameManager : MonoBehaviour
 
     private void EventManager_OnScoreCapReached(PlayerSide playerSide)
     {
-        if (currentGamePlayState == GamePlayState.Center)
+        if (currentGamePlayState == GameplayState.Center)
         {
             if (playerSide == PlayerSide.Left)// Left player won the round so we move to the right for the next round
-                SetGamePlayState(GamePlayState.Right);
+                SetGamePlayState(GameplayState.Right);
             else
-                SetGamePlayState(GamePlayState.Left);
+                SetGamePlayState(GameplayState.Left);
         }
-        else if (currentGamePlayState == GamePlayState.Right || currentGamePlayState == GamePlayState.Left)
+        else if (currentGamePlayState == GameplayState.Right || currentGamePlayState == GameplayState.Left)
         {
             // if the current game play state is Left (right player has advantage)
             // && the location being passed is Right (right player also won the current round)
             // then the Right player has won the match
-            if (currentGamePlayState == GamePlayState.Left && playerSide == PlayerSide.Right ||
-                currentGamePlayState == GamePlayState.Right && playerSide == PlayerSide.Left)
+            if (currentGamePlayState == GameplayState.Left && playerSide == PlayerSide.Right ||
+                currentGamePlayState == GameplayState.Right && playerSide == PlayerSide.Left)
             {
                 EventManager.GameOver(playerSide);
             }
             else
-                SetGamePlayState(GamePlayState.Center);
+                SetGamePlayState(GameplayState.Center);
         }
     }
 

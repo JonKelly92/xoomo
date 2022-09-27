@@ -3,29 +3,37 @@ using UnityEngine;
 public class GamePlayTimer : MonoBehaviour
 {
     private float timeRemaining;
-    private bool isGamePlayTimer; // toggle between counting the game play timer or the pre game timer
+    private bool isGameplayTimer; // toggle between counting the game play timer or the pre game timer
     private bool stopTimer;
 
     void Awake()
     {
-        EventManager.OnGamePlayTimerStart += EventManager_OnGamePlayTimerStart;
+        EventManager.OnGameplayTimerStar += EventManager_OnGamePlayTimerStart;
         EventManager.OnGameOver += EventManager_OnGameOver;
+        EventManager.OnPreGameTimerStart += EventManager_OnPreGameTimerStart;
 
         timeRemaining = 0;
-        isGamePlayTimer = false;
+        isGameplayTimer = false;
         stopTimer = true;
     }
 
     private void OnDestroy()
     {
-        EventManager.OnGamePlayTimerStart -= EventManager_OnGamePlayTimerStart;
+        EventManager.OnGameplayTimerStar -= EventManager_OnGamePlayTimerStart;
         EventManager.OnGameOver -= EventManager_OnGameOver;
+        EventManager.OnPreGameTimerStart -= EventManager_OnPreGameTimerStart;
+    }
+    private void EventManager_OnPreGameTimerStart(int startTime)
+    {
+        timeRemaining = startTime;
+        isGameplayTimer = false;
+        stopTimer = false;
     }
 
     private void EventManager_OnGamePlayTimerStart(int startTime)
     {
         timeRemaining = startTime;
-        isGamePlayTimer = true;
+        isGameplayTimer = true;
         stopTimer = false;
     }
 
@@ -41,21 +49,37 @@ public class GamePlayTimer : MonoBehaviour
 
         timeRemaining -= Time.deltaTime;
 
-        if (timeRemaining < 0)
-            timeRemaining = 0;
+        string formattedTime;
 
-        string formattedTime = timeRemaining.ToString("0.00");
-
-        if (isGamePlayTimer)
-            UIManager.Instance.UpdateGamePlayTimer(formattedTime);
-        else
-            UIManager.Instance.UpdatePreGameTimer(formattedTime);
-
-        if (timeRemaining == 0)
+        if (isGameplayTimer)
         {
-            stopTimer = true;
-            EventManager.GamePlayTimerEnd();
-        }
+            if (timeRemaining <= 0)
+            {
+                formattedTime = "0.0";
+                stopTimer = true;
+                EventManager.GameplayTimerEnd();
+            }
+            else
+                formattedTime = timeRemaining.ToString("0.00");
 
+            UIManager.Instance.UpdateGameplayTimer(formattedTime);
+        }
+        else
+        {
+            if (timeRemaining < 1 && timeRemaining > 0.5f)
+            {
+                formattedTime = "GO!";
+            }
+            else if(timeRemaining < 0.5f)
+            {
+                formattedTime = "GO!";
+                stopTimer = true;
+                EventManager.PreGameTimerEnd();
+            }
+            else
+                formattedTime = timeRemaining.ToString("0");
+
+            UIManager.Instance.UpdatePreGameTimer(formattedTime);
+        }
     }
 }

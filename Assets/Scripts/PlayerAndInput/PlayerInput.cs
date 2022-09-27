@@ -5,12 +5,12 @@ public abstract class PlayerInput : MonoBehaviour
     protected int totalTapCount;
     protected PlayerObject playerObject;
 
-    protected GamePlayState gamePlayState;
+    protected GameplayState gamePlayState;
 
     protected virtual void Awake()
     {
         EventManager.OnScoreCapReached += EventManager_OnScoreCapReached;
-        EventManager.OnGamePlayStateChangeCompleted += EventManager_OnGamePlayStateChangeCompleted;
+        EventManager.OnGameplayStateChangeCompleted += EventManager_OnGamePlayStateChangeCompleted;
         EventManager.OnGameOver += EventManager_OnGameOver;
     }
 
@@ -25,7 +25,7 @@ public abstract class PlayerInput : MonoBehaviour
     protected virtual void OnDestroy()
     {
         EventManager.OnScoreCapReached -= EventManager_OnScoreCapReached;
-        EventManager.OnGamePlayStateChangeCompleted -= EventManager_OnGamePlayStateChangeCompleted;
+        EventManager.OnGameplayStateChangeCompleted -= EventManager_OnGamePlayStateChangeCompleted;
         EventManager.OnGameOver -= EventManager_OnGameOver;
     }
 

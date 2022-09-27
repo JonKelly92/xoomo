@@ -20,7 +20,7 @@ public class GamePlayArea : MonoBehaviour
             Instance = this;
     }
 
-    public Vector3 GetTransformForAnimation(PlayerSide location, GamePlayState gamePlayState)
+    public Vector3 GetTransformForAnimation(PlayerSide location, GameplayState gamePlayState)
     {
         Vector3 destination = Vector3.zero;
 
@@ -28,20 +28,20 @@ public class GamePlayArea : MonoBehaviour
         if (location == PlayerSide.Left)
         {
             // Where are we moving that player to
-            if (gamePlayState == GamePlayState.Center)
+            if (gamePlayState == GameplayState.Center)
                 destination = position_Center_LeftPlayer.position;
-            else if (gamePlayState == GamePlayState.Left)
+            else if (gamePlayState == GameplayState.Left)
                 destination = position_Left_LeftPlayer.position;
-            else if (gamePlayState == GamePlayState.Right)
+            else if (gamePlayState == GameplayState.Right)
                 destination = position_Right_LeftPlayer.position;
         }
         else
         {
-            if (gamePlayState == GamePlayState.Center)
+            if (gamePlayState == GameplayState.Center)
                 destination = position_Center_RightPlayer.position;
-            else if (gamePlayState == GamePlayState.Left)
+            else if (gamePlayState == GameplayState.Left)
                 destination = position_Left_RightPlayer.position;
-            else if (gamePlayState == GamePlayState.Right)
+            else if (gamePlayState == GameplayState.Right)
                 destination = position_Right_RightPlayer.position;
         }
 

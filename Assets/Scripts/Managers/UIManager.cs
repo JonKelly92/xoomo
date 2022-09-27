@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -23,9 +24,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button leftButton;
     [SerializeField] private Button rightButton;
 
+    [SerializeField] private TextMeshProUGUI preGameTimer; // this timer counts the seconds until the game starts
     [SerializeField] private TextMeshProUGUI gameplayTimer; // this timer counts the seconds until the game ends
 
-    private GamePlayState gamePlayState;
+    [SerializeField] private UnityEvent OnGameplayStart;
+
+    private GameplayState gameplayState;
 
     private void Awake()
     {
@@ -36,8 +40,9 @@ public class UIManager : MonoBehaviour
 
         EventManager.OnTapScoreUpdate += EventManager_OnTapScoreUpdate;
         EventManager.OnOverallScoreUpdate += EventManager_OnOverallScoreUpdate;
-        EventManager.OnGamePlayStateChanged += EventManager_OnGamePlayStateChanged;
+        EventManager.OnGameplayStateChanged += EventManager_OnGameplayStateChanged;
         EventManager.OnGameOver += EventManager_OnGameOver;
+        EventManager.OnPreGameTimerEnd += EventManager_OnPreGameTimerEnd;
 
         leftButton.onClick.AddListener(LeftBtnPress);
         rightButton.onClick.AddListener(RightBtnPress);
@@ -49,8 +54,9 @@ public class UIManager : MonoBehaviour
     {
         EventManager.OnTapScoreUpdate -= EventManager_OnTapScoreUpdate;
         EventManager.OnOverallScoreUpdate -= EventManager_OnOverallScoreUpdate;
-        EventManager.OnGamePlayStateChanged -= EventManager_OnGamePlayStateChanged;
+        EventManager.OnGameplayStateChanged -= EventManager_OnGameplayStateChanged;
         EventManager.OnGameOver -= EventManager_OnGameOver;
+        EventManager.OnPreGameTimerEnd -= EventManager_OnPreGameTimerEnd;
 
         leftButton.onClick.RemoveAllListeners();
         rightButton.onClick.RemoveAllListeners();
@@ -58,9 +64,15 @@ public class UIManager : MonoBehaviour
         exitButton.onClick.RemoveAllListeners();
     }
 
-    private void EventManager_OnGamePlayStateChanged(GamePlayState state)
+    private void EventManager_OnPreGameTimerEnd()
     {
-        gamePlayState = state;
+        // The game has started 
+        OnGameplayStart.Invoke(); 
+    }
+
+    private void EventManager_OnGameplayStateChanged(GameplayState state)
+    {
+        gameplayState = state;
 
         // DEBUG --------------
 
@@ -73,17 +85,17 @@ public class UIManager : MonoBehaviour
 
         switch (state)
         {
-            case GamePlayState.Center:
+            case GameplayState.Center:
                 score_Center_LeftPlayer.gameObject.SetActive(true);
                 score_Center_RightPlayer.gameObject.SetActive(true);
                 break;
 
-            case GamePlayState.Left:
+            case GameplayState.Left:
                 score_Left_LeftPlayer.gameObject.SetActive(true);
                 score_Left_RightPlayer.gameObject.SetActive(true);
                 break;
 
-            case GamePlayState.Right:
+            case GameplayState.Right:
                 score_Right_LeftPlayer.gameObject.SetActive(true);
                 score_Right_RightPlayer.gameObject.SetActive(true);
                 break;
@@ -102,30 +114,30 @@ public class UIManager : MonoBehaviour
 
         if (location == PlayerSide.Left)
         {
-            switch (gamePlayState)
+            switch (gameplayState)
             {
-                case GamePlayState.Center:
+                case GameplayState.Center:
                     score_Center_LeftPlayer.text = tapScore.ToString();
                     break;
-                case GamePlayState.Left:
+                case GameplayState.Left:
                     score_Left_LeftPlayer.text = tapScore.ToString();
                     break;
-                case GamePlayState.Right:
+                case GameplayState.Right:
                     score_Right_LeftPlayer.text = tapScore.ToString();
                     break;
             }
         }
         else if (location == PlayerSide.Right)
         {
-            switch (gamePlayState)
+            switch (gameplayState)
             {
-                case GamePlayState.Center:
+                case GameplayState.Center:
                     score_Center_RightPlayer.text = tapScore.ToString();
                     break;
-                case GamePlayState.Left:
+                case GameplayState.Left:
                     score_Left_RightPlayer.text = tapScore.ToString();
                     break;
-                case GamePlayState.Right:
+                case GameplayState.Right:
                     score_Right_RightPlayer.text = tapScore.ToString();
                     break;
             }
@@ -135,14 +147,14 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void UpdateGamePlayTimer(string formattedTime)
+    public void UpdateGameplayTimer(string formattedTime)
     {
         gameplayTimer.SetText(formattedTime);
     }
 
     public void UpdatePreGameTimer(string formattedTime)
     {
-
+        preGameTimer.SetText(formattedTime);
     }
 
     private void EventManager_OnGameOver(PlayerSide location) => gameOverPanel.SetActive(true);

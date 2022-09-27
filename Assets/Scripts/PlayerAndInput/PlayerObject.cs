@@ -10,7 +10,7 @@ public class PlayerObject : MonoBehaviour
 
     private void Awake()
     {
-        EventManager.OnGamePlayStateChanged += EventManager_OnGamePlayStateChanged;
+        EventManager.OnGameplayStateChanged += EventManager_OnGamePlayStateChanged;
 
         playerMovement = gameObject.GetComponent<PlayerMovement>();
 
@@ -20,10 +20,10 @@ public class PlayerObject : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventManager.OnGamePlayStateChanged -= EventManager_OnGamePlayStateChanged;
+        EventManager.OnGameplayStateChanged -= EventManager_OnGamePlayStateChanged;
     }
 
-    private void EventManager_OnGamePlayStateChanged(GamePlayState gamePlayState)
+    private void EventManager_OnGamePlayStateChanged(GameplayState gamePlayState)
     {
         playerMovement.MovePlayer(Location, gamePlayState); 
     }

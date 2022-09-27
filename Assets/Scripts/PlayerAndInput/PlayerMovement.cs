@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
         pauseAnimation = true;
     }
 
-    public void MovePlayer(PlayerSide location, GamePlayState gamePlayState)
+    public void MovePlayer(PlayerSide location, GameplayState gamePlayState)
     {
         destination = GamePlayArea.Instance.GetTransformForAnimation(location, gamePlayState);
 
