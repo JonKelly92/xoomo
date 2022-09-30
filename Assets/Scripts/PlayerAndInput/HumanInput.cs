@@ -64,8 +64,6 @@ public class HumanInput : PlayerInput
         }
     }
 
-    protected override void SendTapInput() => playerObject.SendTapCountEvent(totalTapCount);
-
     private void FixedUpdate()
     {
         // block all input
@@ -116,6 +114,8 @@ public class HumanInput : PlayerInput
         SendTapInput();
         ClearScore();
     }
+
+    protected override void SendTapInput() => playerObject.SendTapCountEvent(totalTapCount);
 
     private void LeftBtnPress()
     {
