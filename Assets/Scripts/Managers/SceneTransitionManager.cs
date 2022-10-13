@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public enum SceneStates
 {
     MainMenu,
-    Lobby,
+   // Lobby,
     SinglePlayerGame,
     MultiplayerGame
 }
@@ -17,7 +17,7 @@ public class SceneTransitionManager : NetworkBehaviour
     static public SceneTransitionManager Instance { get; internal set; }
 
     private const string DefaultMainMenu = "MainMenu";
-    private const string Lobby = "Lobby";
+   // private const string Lobby = "Lobby";
     private const string SinglePlayerSceneName = "GameScene";
     private const string MultiPlayerSceneName = "NetworkGameScene";
 
@@ -49,9 +49,9 @@ public class SceneTransitionManager : NetworkBehaviour
             case SceneStates.MainMenu:
                 scenename = DefaultMainMenu;
                 break;
-            case SceneStates.Lobby:
-                scenename = Lobby;
-                break;
+            //case SceneStates.Lobby:
+            //    scenename = Lobby;
+            //    break;
             case SceneStates.SinglePlayerGame:
                 scenename = SinglePlayerSceneName;
                 break;

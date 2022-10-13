@@ -1,9 +1,12 @@
+using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerMovement))]
-public class PlayerObject : MonoBehaviour
+public class NetworkingPlayerObject : NetworkBehaviour
 {
+    private NetworkVariable<int> testVar = new NetworkVariable<int>();
+
     public PlayerSide Location { get; set; }
 
     private PlayerMovement playerMovement;
@@ -18,9 +21,21 @@ public class PlayerObject : MonoBehaviour
             Debug.LogError("PlayerMovement is null");
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         EventManager.OnGameplayStateChanged -= EventManager_OnGamePlayStateChanged;
+
+        base.OnDestroy();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            testVar.Value += 1;
+            NetworkingGameManager.Instance.TEST_TEXT.text = testVar.Value.ToString();
+            Debug.Log(testVar.Value.ToString());
+        }
     }
 
     private void EventManager_OnGamePlayStateChanged(GameplayState gamePlayState)

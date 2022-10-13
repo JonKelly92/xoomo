@@ -13,7 +13,7 @@ public class LobbyManager : NetworkBehaviour
 
     private bool allPlayersInLobby;
     private Dictionary<ulong, bool> clientsInLobby;
-    private const int RequiredPlayers = 2;
+    private const int RequiredPlayers = 1; // DEBUG ---------------------- make this 2
 
     private void Awake()
     {
