@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public enum SceneStates
 {
     MainMenu,
-   // Lobby,
+    Lobby,
     SinglePlayerGame,
     MultiplayerGame
 }
@@ -17,28 +17,28 @@ public class SceneTransitionManager : NetworkBehaviour
     static public SceneTransitionManager Instance { get; internal set; }
 
     private const string DefaultMainMenu = "MainMenu";
-   // private const string Lobby = "Lobby";
+    private const string Lobby = "Lobby";
     private const string SinglePlayerSceneName = "GameScene";
     private const string MultiPlayerSceneName = "NetworkGameScene";
 
-    private int numberOfClientLoaded;
+   // private int numberOfClientLoaded;
 
     private void Awake()
     {
         if (Instance != null)
-            GameObject.Destroy(Instance.gameObject);
+            Destroy(this);
 
         Instance = this;
 
         DontDestroyOnLoad(this);
 
-        EventManager.OnServerStarted += EventManager_OnServerStarted;
+       // EventManager.OnServerStarted += EventManager_OnServerStarted;
     }
 
-    private void EventManager_OnServerStarted()
-    {
-        NetworkManager.Singleton.SceneManager.OnLoadComplete += OnLoadComplete;
-    }
+    //private void EventManager_OnServerStarted()
+    //{
+    //    NetworkManager.Singleton.SceneManager.OnLoadComplete += OnLoadComplete;
+    //}
 
     public void SwitchScene(SceneStates sceneState)
     {
@@ -49,9 +49,9 @@ public class SceneTransitionManager : NetworkBehaviour
             case SceneStates.MainMenu:
                 scenename = DefaultMainMenu;
                 break;
-            //case SceneStates.Lobby:
-            //    scenename = Lobby;
-            //    break;
+            case SceneStates.Lobby:
+                scenename = Lobby;
+                break;
             case SceneStates.SinglePlayerGame:
                 scenename = SinglePlayerSceneName;
                 break;
@@ -62,7 +62,7 @@ public class SceneTransitionManager : NetworkBehaviour
 
         if (NetworkManager.Singleton.IsListening)
         {
-            numberOfClientLoaded = 0;
+           // numberOfClientLoaded = 0;
             NetworkManager.Singleton.SceneManager.LoadScene(scenename, LoadSceneMode.Single);
         }
         else
@@ -71,19 +71,19 @@ public class SceneTransitionManager : NetworkBehaviour
         }
     }
 
-    private void OnLoadComplete(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
-    {
-        numberOfClientLoaded += 1;
-        EventManager.ClientLoadedScene(clientId);
+    //private void OnLoadComplete(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
+    //{
+    //    numberOfClientLoaded += 1;
+    //    EventManager.ClientLoadedScene(clientId);
 
-        // DEBUG ---------------------------------
-        Debug.Log("Player loaded scene : " + clientId);
-    }
+    //    // DEBUG ---------------------------------
+    //    Debug.Log("Player loaded scene : " + clientId);
+    //}
 
-    public bool AllClientsAreLoaded()
-    {
-        return numberOfClientLoaded == NetworkManager.Singleton.ConnectedClients.Count;
-    }
+    //public bool AllClientsAreLoaded()
+    //{
+    //    return numberOfClientLoaded == NetworkManager.Singleton.ConnectedClients.Count;
+    //}
 
     // TODO : Listen for On Server Stopped? -----------------------
     //public void ExitAndLoadMainMenu()

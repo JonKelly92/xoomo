@@ -27,8 +27,8 @@ public class EventManager : MonoBehaviour
     public static event Action OnAnimationStarted; // when changing states an animation plays where the sumos move from one part of the screen to another. We need to keep track of how many animations are playing so we can know how many need to end before we continue
     public static event Action OnAnimationEnded;// we can keep track of how many of the animations have stopped so we know when to continue the gameplay
     // NETWORKING
-    public static event Action<ulong> OnClientLoadedScene; // Called each time a client finishes loading the current scene
-    public static event Action OnServerStarted; // when the host starts the server this will be called
+    //public static event Action<ulong> OnClientLoadedScene; // Called each time a client finishes loading the current scene
+    //public static event Action OnServerStarted; // when the host starts the server this will be called
 
 
     // SCORE
@@ -55,7 +55,7 @@ public class EventManager : MonoBehaviour
     public static void AnimationStarted() => OnAnimationStarted?.Invoke();
     public static void AnimationEnded() => OnAnimationEnded?.Invoke();
     // NETWORKING
-    public static void ClientLoadedScene(ulong clientId) => OnClientLoadedScene?.Invoke(clientId);
-    public static void ServerStarted() => OnServerStarted?.Invoke();
+    //public static void ClientLoadedScene(ulong clientId) => OnClientLoadedScene?.Invoke(clientId);
+    //public static void ServerStarted() => OnServerStarted?.Invoke();
 
 }

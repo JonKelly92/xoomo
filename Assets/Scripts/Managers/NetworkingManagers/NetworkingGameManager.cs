@@ -36,87 +36,13 @@ public class NetworkingGameManager : NetworkBehaviour
         EventManager.OnExitToMainMenu += EventManager_OnExitToMainMenu;
         EventManager.OnGameplayTimerEnd += EventManager_OnGamePlayTimerEnd;
         EventManager.OnPreGameTimerEnd += EventManager_OnPreGameTimerEnd;
-        EventManager.OnClientLoadedScene += EventManager_OnClientLoadedScene;
 
         animationsInProgress = 0;
     }
 
-    public override void OnNetworkSpawn()
+    private void SetPlayersSide()
     {
-        base.OnNetworkSpawn();
-
-        if (IsServer)
-        {
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-        }
-
-        // DEBUG ---------------------------
-        if (IsServer)
-        {
-            TEST_VAR.Value = 0;
-        }
-        else
-        {
-            TEST_VAR.OnValueChanged += OnTestVarChanged;
-        }
-
-        // TODO -----------------------------
-        // make sure all the players have loaded the scene before starting the timer
-
-        EventManager.PreGameTimerStart(3);
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        base.OnNetworkDespawn();
-
-        NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
-        TEST_VAR.OnValueChanged -= OnTestVarChanged;
-    }
-
-    private void OnClientConnected(ulong obj)
-    {
-    }
-
-    // DEBUG --------------------------------------------------------------
-    private void OnTestVarChanged(int previousValue, int newValue)
-    {
-        TEST_TEXT.text = newValue.ToString();
-    }
-
-    // DEBUG -------------------------------
-
-    private void Update()
-    {
-        if (!IsSpawned)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            //foreach(var client in NetworkManager.Singleton.ConnectedClientsList)
-            //{
-            //    Debug.Log(client.ClientId);
-            //    TEST_TEXT.text = client.ClientId.ToString();
-            //}
-
-            if (IsServer)
-            {
-                TEST_VAR.Value = 0;
-                Debug.Log("Pressed : Server");
-            }
-            else if (IsClient)
-            {
-                TEST_VAR.Value = 1;
-                Debug.Log("Pressed : Client");
-            }
-        }
-    }
-
-    // ----------------------------------------
-
-    private void EventManager_OnClientLoadedScene(ulong clientId)
-    {
-        NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out var client);
+        NetworkManager.Singleton.ConnectedClients.TryGetValue(OwnerClientId, out var client);
         var playerObject = client.PlayerObject.GetComponent<NetworkingPlayerObject>();
 
         // Assign the players to either the left or right side of the play area
@@ -124,6 +50,18 @@ public class NetworkingGameManager : NetworkBehaviour
             playerObject.Location = PlayerSide.Left;
         else
             playerObject.Location = PlayerSide.Right;
+
+        // DEBUG ------------------
+        TEST_TEXT.text = playerObject.Location.ToString();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        SetPlayersSide();
+
+        EventManager.PreGameTimerStart(3);
     }
 
     public override void OnDestroy()

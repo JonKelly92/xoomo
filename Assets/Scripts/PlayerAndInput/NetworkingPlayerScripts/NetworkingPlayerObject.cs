@@ -5,7 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMovement))]
 public class NetworkingPlayerObject : NetworkBehaviour
 {
-    private NetworkVariable<int> testVar = new NetworkVariable<int>();
+    private NetworkVariable<int> testVar = new NetworkVariable<int>(
+        0,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Owner);
 
     public PlayerSide Location { get; set; }
 
@@ -30,7 +33,7 @@ public class NetworkingPlayerObject : NetworkBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (IsOwner && Input.GetKeyDown(KeyCode.G))
         {
             testVar.Value += 1;
             NetworkingGameManager.Instance.TEST_TEXT.text = testVar.Value.ToString();

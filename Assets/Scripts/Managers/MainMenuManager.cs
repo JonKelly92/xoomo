@@ -25,6 +25,6 @@ public class MainMenuManager : MonoBehaviour
 
     private void MultiPlayerButtonPress()
     {
-        SceneTransitionManager.Instance.SwitchScene(SceneStates.MultiplayerGame);
+        SceneTransitionManager.Instance.SwitchScene(SceneStates.Lobby);
     }
 }
