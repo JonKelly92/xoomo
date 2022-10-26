@@ -9,7 +9,7 @@ public class EventManager : MonoBehaviour
     public static event Action<int, PlayerSide> OnTapScoreUpdate; // the score manager has updated the score for this round and is broadcasting that out
     public static event Action<int, PlayerSide> OnOverallScoreUpdate; // the score manager has updated the score for all the rounds combined and is broadcasting that out
     // TIMER
-    public static event Action<int> OnGameplayTimerStar; // this timer counts down to the end of the game, parameter seconds until end of the game
+    public static event Action<int> OnGameplayTimerStart; // this timer counts down to the end of the game, parameter seconds until end of the game
     public static event Action OnGameplayTimerEnd; // times up, the game is over
     public static event Action<int> OnPreGameTimerStart; // this timer counts down to the game startings (i.e. 3-2-1-GO!)
     public static event Action OnPreGameTimerEnd; // The timer has ended now the game can begin
@@ -37,7 +37,7 @@ public class EventManager : MonoBehaviour
     public static void TapScoreUpdated(int tapScore, PlayerSide location) => OnTapScoreUpdate?.Invoke(tapScore, location);
     public static void OverallScoreUpdated(int overallScore, PlayerSide location) => OnOverallScoreUpdate?.Invoke(overallScore, location);
     // TIMER
-    public static void GamePlayTimerStart(int secondsUntilGameEnd) => OnGameplayTimerStar?.Invoke(secondsUntilGameEnd);
+    public static void GamePlayTimerStart(int secondsUntilGameEnd) => OnGameplayTimerStart?.Invoke(secondsUntilGameEnd);
     public static void GameplayTimerEnd() => OnGameplayTimerEnd?.Invoke();
     public static void PreGameTimerStart(int secondsToCountDown) => OnPreGameTimerStart?.Invoke(secondsToCountDown);
     public static void PreGameTimerEnd() => OnPreGameTimerEnd?.Invoke();

@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     public const string MainMenuSceneName = "MainMenu";
 
     [SerializeField] int roundScoreCap = 130; // when a player reaches this score the round ends and the game play state is changed (swithcing from center to left/right or from left/right to center)
-
+    [SerializeField] public int preGameTimer = 3;
     [SerializeField] int gamePlayTimer = 45;
 
     [SerializeField] private GameObject HumanPlayerPrefab;
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        EventManager.PreGameTimerStart(3);
+       // EventManager.PreGameTimerStart(3);
     }
 
     private void OnDestroy()

@@ -8,7 +8,7 @@ public class GamePlayTimer : MonoBehaviour
 
     void Awake()
     {
-        EventManager.OnGameplayTimerStar += EventManager_OnGamePlayTimerStart;
+        EventManager.OnGameplayTimerStart += EventManager_OnGamePlayTimerStart;
         EventManager.OnGameOver += EventManager_OnGameOver;
         EventManager.OnPreGameTimerStart += EventManager_OnPreGameTimerStart;
 
@@ -19,7 +19,7 @@ public class GamePlayTimer : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventManager.OnGameplayTimerStar -= EventManager_OnGamePlayTimerStart;
+        EventManager.OnGameplayTimerStart -= EventManager_OnGamePlayTimerStart;
         EventManager.OnGameOver -= EventManager_OnGameOver;
         EventManager.OnPreGameTimerStart -= EventManager_OnPreGameTimerStart;
     }

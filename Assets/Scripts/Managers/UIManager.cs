@@ -27,6 +27,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI preGameTimer; // this timer counts the seconds until the game starts
     [SerializeField] private TextMeshProUGUI gameplayTimer; // this timer counts the seconds until the game ends
 
+    [SerializeField] private Button startButton;
+
+    [SerializeField] private UnityEvent OnStartPreGameTimer;
     [SerializeField] private UnityEvent OnGameplayStart;
 
     private GameplayState gameplayState;
@@ -48,6 +51,7 @@ public class UIManager : MonoBehaviour
         rightButton.onClick.AddListener(RightBtnPress);
         restartButton.onClick.AddListener(RestartGame);
         exitButton.onClick.AddListener(ExitToMainMenu);
+        startButton.onClick.AddListener(StartBtnPress);
     }
 
     private void OnDestroy()
@@ -175,5 +179,11 @@ public class UIManager : MonoBehaviour
     private void LeftBtnPress() => EventManager.LeftButtonPressed();
 
     private void RightBtnPress() => EventManager.RightButtonPressed();
+
+    private void StartBtnPress()
+    {
+        OnStartPreGameTimer.Invoke();
+        EventManager.PreGameTimerStart(GameManager.Instance.preGameTimer);
+    }
 
 }
