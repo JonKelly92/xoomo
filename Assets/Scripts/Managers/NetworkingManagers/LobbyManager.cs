@@ -32,17 +32,21 @@ public class LobbyManager : NetworkBehaviour
 
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
     }
-    private void NetworkManager_OnClientConnectedCallback(ulong obj)
-    {
-        if (NetworkManager.Singleton.ConnectedClientsList.Count == RequiredPlayers)
-            LoadGameScene();
-    }
 
     private void ClientButtonPress()
     {
         startButtonPanel.gameObject.SetActive(false);
 
         NetworkManager.Singleton.StartClient();
+    }
+
+    private void NetworkManager_OnClientConnectedCallback(ulong obj)
+    {
+        if(!IsServer)
+            return;
+        
+        if (NetworkManager.Singleton.ConnectedClientsList.Count == RequiredPlayers)
+            LoadGameScene();
     }
 
     private void LoadGameScene()

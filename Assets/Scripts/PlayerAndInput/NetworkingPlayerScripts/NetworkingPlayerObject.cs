@@ -5,10 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMovement))]
 public class NetworkingPlayerObject : NetworkBehaviour
 {
-    private NetworkVariable<int> testVar = new NetworkVariable<int>(
-        0,
+    // DEBUG ---------------------
+    public NetworkVariable<int> TEST_VAR = new NetworkVariable<int>(0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Owner);
+
+    // ---------------------
+
 
     public PlayerSide Location { get; set; }
 
@@ -33,11 +36,18 @@ public class NetworkingPlayerObject : NetworkBehaviour
 
     private void Update()
     {
-        if (IsOwner && Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            testVar.Value += 1;
-            NetworkingGameManager.Instance.TEST_TEXT.text = testVar.Value.ToString();
-            Debug.Log(testVar.Value.ToString());
+            //testVar.Value += 1;
+
+            if(IsOwner)
+                TEST_VAR.Value++;
+
+            Debug.Log(OwnerClientId + " : " + TEST_VAR.Value.ToString());
+
+            //NetworkingGameManager.Instance.TEST_TEXT.text = testVar.Value.ToString();
+            //NetworkingGameManager.Instance.LOG_TEXT.text += testVar.Value.ToString() + System.Environment.NewLine;
+            //Debug.Log(testVar.Value.ToString());
         }
     }
 

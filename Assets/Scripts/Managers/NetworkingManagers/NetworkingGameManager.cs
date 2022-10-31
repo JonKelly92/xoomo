@@ -8,11 +8,9 @@ public class NetworkingGameManager : NetworkBehaviour
     public static NetworkingGameManager Instance { get; private set; }
 
     // DEBUG -----------------------------
-    public TextMeshProUGUI TEST_TEXT;
-    public NetworkVariable<int> TEST_VAR = new NetworkVariable<int>(
-        0, 
-        NetworkVariableReadPermission.Everyone, 
-        NetworkVariableWritePermission.Owner);
+    public TextMeshProUGUI LOG_TEXT;
+    //public TextMeshProUGUI TEST_TEXT;
+    public NetworkVariable<int> TEST_VAR = new NetworkVariable<int>(0);
 
     [SerializeField] int roundScoreCap = 130; // when a player reaches this score the round ends and the game play state is changed (swithcing from center to left/right or from left/right to center)
 
@@ -38,21 +36,39 @@ public class NetworkingGameManager : NetworkBehaviour
         EventManager.OnPreGameTimerEnd += EventManager_OnPreGameTimerEnd;
 
         animationsInProgress = 0;
+
+        // DEBUG --------------------------
+        Application.logMessageReceived += Application_logMessageReceived;
     }
+    // DEBUG NETWORKING ------------------------------------------
+    private void Application_logMessageReceived(string condition, string stackTrace, LogType type)
+    {
+        LOG_TEXT.text += condition + Environment.NewLine;
+    }
+
+    //public void TextNetworkingVar()
+    //{
+    //    TEST_VAR.Value++;
+    //    Debug.Log("TEST VAR : " + TEST_VAR.Value.ToString());
+    //}
+
+
+    // ------------------------------------------
 
     private void SetPlayersSide()
     {
-        NetworkManager.Singleton.ConnectedClients.TryGetValue(OwnerClientId, out var client);
-        var playerObject = client.PlayerObject.GetComponent<NetworkingPlayerObject>();
+        // TODO ------------------------------
+        // The below code doens't work because only the server can access NetworkManager.Singleton.ConnectedClients
 
-        // Assign the players to either the left or right side of the play area
-        if (IsServer)
-            playerObject.Location = PlayerSide.Left;
-        else
-            playerObject.Location = PlayerSide.Right;
+        //NetworkManager.Singleton.ConnectedClients.TryGetValue(OwnerClientId, out var client);
+        //var playerObject = client.PlayerObject.GetComponent<NetworkingPlayerObject>();
 
-        // DEBUG ------------------
-        TEST_TEXT.text = playerObject.Location.ToString();
+        //// Assign the players to either the left or right side of the play area
+        //if (IsServer)
+        //    playerObject.Location = PlayerSide.Left;
+        //else
+        //    playerObject.Location = PlayerSide.Right;
+
     }
 
     public override void OnNetworkSpawn()
@@ -73,6 +89,9 @@ public class NetworkingGameManager : NetworkBehaviour
         EventManager.OnExitToMainMenu -= EventManager_OnExitToMainMenu;
         EventManager.OnGameplayTimerEnd -= EventManager_OnGamePlayTimerEnd;
         EventManager.OnPreGameTimerEnd -= EventManager_OnPreGameTimerEnd;
+
+        // DEBUG --------------------------
+        Application.logMessageReceived -= Application_logMessageReceived;
 
         base.OnDestroy();
     }
