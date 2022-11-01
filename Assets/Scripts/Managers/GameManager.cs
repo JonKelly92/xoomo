@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum GameplayState
 {
@@ -18,21 +17,20 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public const string MainMenuSceneName = "MainMenu";
-
     [SerializeField] int roundScoreCap = 130; // when a player reaches this score the round ends and the game play state is changed (swithcing from center to left/right or from left/right to center)
-    [SerializeField] public int preGameTimer = 3;
+    [SerializeField] int preGameTimer = 3;
     [SerializeField] int gamePlayTimer = 45;
 
     [SerializeField] private GameObject HumanPlayerPrefab;
     [SerializeField] private GameObject AIPlayerPrefab;
 
-    private PlayerObject playerLeft;
-    private PlayerObject playerRight;
-
     private GameplayState currentGamePlayState;
 
     private int animationsInProgress;
+    public int PreGameTimer
+    {
+        get { return preGameTimer; }
+    }
 
     private void Awake()
     {
@@ -42,12 +40,12 @@ public class GameManager : MonoBehaviour
             Instance = this;
 
         GameObject leftPlayerObject = Instantiate(HumanPlayerPrefab, Vector3.zero, Quaternion.identity);
-        playerLeft = leftPlayerObject.GetComponent<PlayerObject>();
+        PlayerObject playerLeft = leftPlayerObject.GetComponent<PlayerObject>();
         if (playerLeft != null)
             playerLeft.Location = PlayerSide.Left;
 
         GameObject rightPlayerObject = Instantiate(AIPlayerPrefab, Vector3.zero, Quaternion.identity);
-        playerRight = rightPlayerObject.GetComponent<PlayerObject>();
+        PlayerObject playerRight = rightPlayerObject.GetComponent<PlayerObject>();
         if (playerRight != null)
             playerRight.Location = PlayerSide.Right;
 
@@ -147,7 +145,7 @@ public class GameManager : MonoBehaviour
             Debug.LogError("More animations have finished than were started"); // just in case, save some headaches later
     }
 
-    private void EventManager_OnRestartGame() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    private void EventManager_OnRestartGame() => SceneTransitionManager.Instance.SwitchScene(SceneStates.SinglePlayerGame);
 
-    private void EventManager_OnExitToMainMenu() => SceneManager.LoadScene(MainMenuSceneName);
+    private void EventManager_OnExitToMainMenu() => SceneTransitionManager.Instance.SwitchScene(SceneStates.MainMenu);
 }

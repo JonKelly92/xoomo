@@ -7,25 +7,31 @@ public class NetworkingGameManager : NetworkBehaviour
 {
     public static NetworkingGameManager Instance { get; private set; }
 
-    // DEBUG -----------------------------
+    // DEBUG --------------------------------
     public TextMeshProUGUI LOG_TEXT;
-    //public TextMeshProUGUI TEST_TEXT;
-    public NetworkVariable<int> TEST_VAR = new NetworkVariable<int>(0);
 
-    [SerializeField] int roundScoreCap = 130; // when a player reaches this score the round ends and the game play state is changed (swithcing from center to left/right or from left/right to center)
-
-    [SerializeField] int gamePlayTimer = 45;
+    int roundScoreCap = 130; // when a player reaches this score the round ends and the game play state is changed (swithcing from center to left/right or from left/right to center)
+    int preGameTimer = 3;
+    int gamePlayTimer = 45;
 
     private GameplayState currentGamePlayState;
 
     private int animationsInProgress;
 
-    private void Awake()
+    public int PreGameTimer
+    {
+        get { return preGameTimer; }
+    }
+
+    public virtual void Awake()
     {
         if (Instance != null && Instance != this)
             Destroy(this);
         else
             Instance = this;
+
+        // TODO --------------------------------------
+       // SetPlayerSides();
 
         EventManager.OnScoreCapReached += EventManager_OnScoreCapReached;
         EventManager.OnAnimationStarted += EventManager_OnAnimationStarted;
@@ -37,7 +43,7 @@ public class NetworkingGameManager : NetworkBehaviour
 
         animationsInProgress = 0;
 
-        // DEBUG --------------------------
+        // DEBUG NETWORKING ------------------------------------------
         Application.logMessageReceived += Application_logMessageReceived;
     }
     // DEBUG NETWORKING ------------------------------------------
@@ -45,39 +51,11 @@ public class NetworkingGameManager : NetworkBehaviour
     {
         LOG_TEXT.text += condition + Environment.NewLine;
     }
-
-    //public void TextNetworkingVar()
-    //{
-    //    TEST_VAR.Value++;
-    //    Debug.Log("TEST VAR : " + TEST_VAR.Value.ToString());
-    //}
-
-
-    // ------------------------------------------
-
-    private void SetPlayersSide()
-    {
-        // TODO ------------------------------
-        // The below code doens't work because only the server can access NetworkManager.Singleton.ConnectedClients
-
-        //NetworkManager.Singleton.ConnectedClients.TryGetValue(OwnerClientId, out var client);
-        //var playerObject = client.PlayerObject.GetComponent<NetworkingPlayerObject>();
-
-        //// Assign the players to either the left or right side of the play area
-        //if (IsServer)
-        //    playerObject.Location = PlayerSide.Left;
-        //else
-        //    playerObject.Location = PlayerSide.Right;
-
-    }
+    // ---------------------------------------------------
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-
-        SetPlayersSide();
-
-        EventManager.PreGameTimerStart(3);
     }
 
     public override void OnDestroy()
@@ -90,15 +68,25 @@ public class NetworkingGameManager : NetworkBehaviour
         EventManager.OnGameplayTimerEnd -= EventManager_OnGamePlayTimerEnd;
         EventManager.OnPreGameTimerEnd -= EventManager_OnPreGameTimerEnd;
 
-        // DEBUG --------------------------
-        Application.logMessageReceived -= Application_logMessageReceived;
-
         base.OnDestroy();
     }
 
+    //protected virtual void SetPlayerSides()
+    //{
+    //    GameObject leftPlayerObject = Instantiate(HumanPlayerPrefab, Vector3.zero, Quaternion.identity);
+    //    playerLeft = leftPlayerObject.GetComponent<PlayerObject>();
+    //    if (playerLeft != null)
+    //        playerLeft.Location = PlayerSide.Left;
+
+    //    GameObject rightPlayerObject = Instantiate(AIPlayerPrefab, Vector3.zero, Quaternion.identity);
+    //    playerRight = rightPlayerObject.GetComponent<PlayerObject>();
+    //    if (playerRight != null)
+    //        playerRight.Location = PlayerSide.Right;
+    //}
+
     private void EventManager_OnPreGameTimerEnd()
     {
-        StartNewGame();
+       // StartNewGame();
     }
 
     private void StartNewGame()
@@ -142,7 +130,6 @@ public class NetworkingGameManager : NetworkBehaviour
     {
         PlayerSide playerSide = ScoreManager.Instance.GetWinnerByScore();
         EventManager.GameOver(playerSide);
-
 
         // DEBUG--------------------------------------------------------------
         Debug.Log("Winner by overall score : " + playerSide.ToString());

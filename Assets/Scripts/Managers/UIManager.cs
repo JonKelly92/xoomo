@@ -183,7 +183,7 @@ public class UIManager : MonoBehaviour
     private void StartBtnPress()
     {
         OnStartPreGameTimer.Invoke();
-        EventManager.PreGameTimerStart(GameManager.Instance.preGameTimer);
+        EventManager.PreGameTimerStart(GameManager.Instance.PreGameTimer);
     }
 
 }

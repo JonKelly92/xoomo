@@ -1,6 +1,4 @@
-using System;
 using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public enum SceneStates
@@ -21,8 +19,6 @@ public class SceneTransitionManager : NetworkBehaviour
     private const string SinglePlayerSceneName = "GameScene";
     private const string MultiPlayerSceneName = "NetworkGameScene";
 
-   // private int numberOfClientLoaded;
-
     private void Awake()
     {
         if (Instance != null)
@@ -32,13 +28,7 @@ public class SceneTransitionManager : NetworkBehaviour
 
         DontDestroyOnLoad(this);
 
-       // EventManager.OnServerStarted += EventManager_OnServerStarted;
     }
-
-    //private void EventManager_OnServerStarted()
-    //{
-    //    NetworkManager.Singleton.SceneManager.OnLoadComplete += OnLoadComplete;
-    //}
 
     public void SwitchScene(SceneStates sceneState)
     {
@@ -62,7 +52,6 @@ public class SceneTransitionManager : NetworkBehaviour
 
         if (NetworkManager.Singleton.IsListening)
         {
-           // numberOfClientLoaded = 0;
             NetworkManager.Singleton.SceneManager.LoadScene(scenename, LoadSceneMode.Single);
         }
         else
@@ -70,25 +59,4 @@ public class SceneTransitionManager : NetworkBehaviour
             SceneManager.LoadSceneAsync(scenename);
         }
     }
-
-    //private void OnLoadComplete(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
-    //{
-    //    numberOfClientLoaded += 1;
-    //    EventManager.ClientLoadedScene(clientId);
-
-    //    // DEBUG ---------------------------------
-    //    Debug.Log("Player loaded scene : " + clientId);
-    //}
-
-    //public bool AllClientsAreLoaded()
-    //{
-    //    return numberOfClientLoaded == NetworkManager.Singleton.ConnectedClients.Count;
-    //}
-
-    // TODO : Listen for On Server Stopped? -----------------------
-    //public void ExitAndLoadMainMenu()
-    //{
-    //    NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnLoadComplete;
-    //    SceneManager.LoadScene(DefaultMainMenu);
-    //}
 }
