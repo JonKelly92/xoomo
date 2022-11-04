@@ -27,13 +27,6 @@ public class GameManager : MonoBehaviour
 
     private GameplayState currentGamePlayState;
 
-    private int animationsInProgress;
-
-    public int PreGameTimer
-    {
-        get { return preGameTimer; }
-    }
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -52,21 +45,20 @@ public class GameManager : MonoBehaviour
             playerRight.Location = PlayerSide.Right;
 
         EventManager.OnScoreCapReached += EventManager_OnScoreCapReached;
-        EventManager.OnAnimationStarted += EventManager_OnAnimationStarted;
-        EventManager.OnAnimationEnded += EventManager_OnAnimationEnded;
         EventManager.OnRestartGame += EventManager_OnRestartGame;
         EventManager.OnExitToMainMenu += EventManager_OnExitToMainMenu;
         EventManager.OnGameplayTimerEnd += EventManager_OnGamePlayTimerEnd;
         EventManager.OnPreGameTimerEnd += EventManager_OnPreGameTimerEnd;
+    }
 
-        animationsInProgress = 0;
+    private void Start()
+    {
+        EventManager.PreGameTimerStart(preGameTimer);
     }
 
     private void OnDestroy()
     {
         EventManager.OnScoreCapReached -= EventManager_OnScoreCapReached;
-        EventManager.OnAnimationStarted -= EventManager_OnAnimationStarted;
-        EventManager.OnAnimationEnded -= EventManager_OnAnimationEnded;
         EventManager.OnRestartGame -= EventManager_OnRestartGame;
         EventManager.OnExitToMainMenu -= EventManager_OnExitToMainMenu;
         EventManager.OnGameplayTimerEnd -= EventManager_OnGamePlayTimerEnd;
@@ -119,21 +111,6 @@ public class GameManager : MonoBehaviour
     {
         PlayerSide playerSide = ScoreManager.Instance.GetWinnerByScore();
         EventManager.GameOver(playerSide);
-    }
-
-    private void EventManager_OnAnimationStarted()
-    {
-        animationsInProgress++;
-    }
-
-    private void EventManager_OnAnimationEnded()
-    {
-        animationsInProgress--;
-
-        if (animationsInProgress == 0)
-            EventManager.GamePlayStateChangeCompleted();
-        else if (animationsInProgress < 0)
-            Debug.LogError("More animations have finished than were started"); // just in case, save some headaches later
     }
 
     private void EventManager_OnRestartGame() => SceneTransitionManager.Instance.SwitchScene(SceneStates.GameScene);

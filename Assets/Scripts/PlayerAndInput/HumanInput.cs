@@ -18,7 +18,6 @@ public class HumanInput : PlayerInput
     {
         base.Awake();
 
-        EventManager.OnGameplayStateChanged += EventManager_OnGamePlayStateChanged;
         EventManager.OnLeftButtonPressed += LeftBtnPress;
         EventManager.OnRightButtonPressed += RightBtnPress;
 
@@ -30,7 +29,6 @@ public class HumanInput : PlayerInput
     {
         base.OnDestroy();
 
-        EventManager.OnGameplayStateChanged -= EventManager_OnGamePlayStateChanged;
         EventManager.OnLeftButtonPressed -= LeftBtnPress;
         EventManager.OnRightButtonPressed -= RightBtnPress;
     }
@@ -38,12 +36,12 @@ public class HumanInput : PlayerInput
     // Round has ended and the new game play state is being chosen, block input while this is happening
     protected override void EventManager_OnScoreCapReached(PlayerSide obj) => activeButton = AcceptInputFrom.None;
 
-    private void EventManager_OnGamePlayStateChanged(GameplayState state) => gamePlayState = state;
-
     // A new round is starting
-    protected override void EventManager_OnGamePlayStateChangeCompleted()
+    protected override void EventManager_OnGameplayStateChanged(GameplayState state)
     {
         ClearScore();
+
+        gamePlayState = state;
 
         // Setting the state now so we can immediately start recieving input
         switch (gamePlayState)
@@ -71,10 +69,10 @@ public class HumanInput : PlayerInput
             return;
 
         // DEBUG -----------------------------
-        if (Input.GetKey(KeyCode.Z))
-            leftTapCount += 1;
-        else if (Input.GetKey(KeyCode.M))
-            rightTapCount += 1;
+        //if (Input.GetKey(KeyCode.Z))
+        //    leftTapCount += 1;
+        //else if (Input.GetKey(KeyCode.M))
+        //    rightTapCount += 1;
         //----------------------------------------
 
 
@@ -111,8 +109,11 @@ public class HumanInput : PlayerInput
             rightTapCount = 0;
         }
 
-        SendTapInput();
-        ClearScore();
+        if (totalTapCount > 0)
+        {
+            SendTapInput();
+            ClearScore();
+        }
     }
 
     protected override void SendTapInput() => playerObject.SendTapCountEvent(totalTapCount);

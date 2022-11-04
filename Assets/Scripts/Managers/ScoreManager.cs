@@ -36,48 +36,43 @@ public class ScoreManager : MonoBehaviour
 
         EventManager.OnSendingTapCount += EventManager_OnSendingTapCount;
         EventManager.OnScoreCapSet += EventManager_OnScoreCapSet;
-        EventManager.OnGameplayStateChangeCompleted += EventManager_OnGamePlayStateChangeCompleted;
+        EventManager.OnGameplayStateChanged += EventManager_OnGameplayStateChanged;
 
         pauseScore = false;
+
+        playerLeft = new PlayerValues(PlayerSide.Left);
+        playerRight = new PlayerValues(PlayerSide.Right);
     }
 
     private void OnDestroy()
     {
         EventManager.OnSendingTapCount -= EventManager_OnSendingTapCount;
         EventManager.OnScoreCapSet -= EventManager_OnScoreCapSet;
-        EventManager.OnGameplayStateChangeCompleted -= EventManager_OnGamePlayStateChangeCompleted;
+        EventManager.OnGameplayStateChanged -= EventManager_OnGameplayStateChanged;
     }
 
     private void EventManager_OnScoreCapSet(int scoreCap) => this.scoreCap = scoreCap;
 
     private void EventManager_OnSendingTapCount(int tapCount, PlayerSide location)
     {
-        // primarily used when switching between gameplay states
         if (pauseScore)
             return;
 
         if (location == PlayerSide.Left)
-        {
-            if (playerLeft == null)
-                playerLeft = new PlayerValues(location);
-
             UpdateScore(tapCount, playerLeft);
-        }
-        else
-        {
-            if (playerRight == null)
-                playerRight = new PlayerValues(location);
 
+        else
             UpdateScore(tapCount, playerRight);
-        }
     }
 
     private void UpdateScore(int tapCount, PlayerValues player)
     {
-        player.currentTapScore += (tapCount * 5); // x5 because high numbers look better as a score
-        player.overallScore += player.currentTapScore;
+        tapCount = tapCount * 5; // I think scores look better when they are a high number
 
-        UpdateTapScoreEvent(player);
+        player.currentTapScore += tapCount;
+        player.overallScore += tapCount;
+
+        UpdateTapScoreEvent();
         UpdateOverallScoreEvent(player);
 
         if (player.currentTapScore >= scoreCap)
@@ -87,16 +82,16 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    private void UpdateTapScoreEvent(PlayerValues player)
-    {
-        EventManager.TapScoreUpdated(player.currentTapScore, player.playerSide);
-    }
+    private void UpdateTapScoreEvent() => EventManager.TapScoreUpdated(playerLeft.currentTapScore, playerRight.currentTapScore);
+
     private void UpdateOverallScoreEvent(PlayerValues player)
     {
         EventManager.OverallScoreUpdated(player.overallScore, player.playerSide);
+
+        Debug.Log("Left: " + playerLeft.currentTapScore + ", Right: " + playerRight.currentTapScore);
     }
 
-    private void EventManager_OnGamePlayStateChangeCompleted()
+    private void EventManager_OnGameplayStateChanged(GameplayState state)
     {
         // starting a new round so reset the score
         if (playerLeft != null)

@@ -23,7 +23,8 @@ public class AIInput : PlayerInput
     protected override void Start()
     {
         base.Start();
-        pauseTapCount = false;
+
+        pauseTapCount = true;
 
         switch (aiDifficulty)
         {
@@ -60,7 +61,7 @@ public class AIInput : PlayerInput
     }
 
     // Round is starting
-    protected override void EventManager_OnGamePlayStateChangeCompleted()
+    protected override void EventManager_OnGameplayStateChanged(GameplayState obj)
     {
         ClearScore();
         pauseTapCount = false;
