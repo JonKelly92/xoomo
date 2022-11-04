@@ -88,7 +88,8 @@ public class ScoreManager : MonoBehaviour
     {
         EventManager.OverallScoreUpdated(player.overallScore, player.playerSide);
 
-        Debug.Log("Left: " + playerLeft.currentTapScore + ", Right: " + playerRight.currentTapScore);
+        // DEBUG ------------------------------------------------------------------------------------------------
+       // Debug.Log("Left: " + playerLeft.currentTapScore + ", Right: " + playerRight.currentTapScore);
     }
 
     private void EventManager_OnGameplayStateChanged(GameplayState state)

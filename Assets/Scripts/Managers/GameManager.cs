@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
 
     private GameplayState currentGamePlayState;
 
+    public int RoundScoreCap { get { return roundScoreCap; } }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

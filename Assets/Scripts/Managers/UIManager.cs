@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button exitButton;
 
     [SerializeField] private GameObject fightBarRed;
+    [SerializeField] private GameObject fightBarBlue;
 
     [SerializeField] private TextMeshProUGUI overallScore_LeftPlayer;
     [SerializeField] private TextMeshProUGUI overallScore_RightPlayer;
@@ -82,11 +83,13 @@ public class UIManager : MonoBehaviour
     }
     private void EventManager_OnTapScoreUpdate(int tapScoreLeft, int tapScoreRight)
     {
-        float totalScore = tapScoreLeft + tapScoreRight;
+        float scoreCap = GameManager.Instance.RoundScoreCap;
 
-        float leftScorePercentage = (tapScoreLeft / totalScore);
+        float scorePercentage = Math.Clamp((tapScoreLeft / scoreCap), 0, 1);
+        fightBarRed.transform.localScale = new Vector3(scorePercentage, 1, 1);
 
-        fightBarRed.transform.localScale = new Vector3(leftScorePercentage, 1, 1);
+        scorePercentage = Math.Clamp((tapScoreRight / scoreCap), 0, 1);
+        fightBarBlue.transform.localScale = new Vector3(scorePercentage, 1, 1);
     }
 
     public void UpdateGameplayTimer(string formattedTime)
