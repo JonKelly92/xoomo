@@ -1,18 +1,8 @@
 using UnityEngine;
 
-public enum AIDifficulty
-{
-    Easy = 1,
-    Normal = 2,
-    Hard = 3
-}
 
 public class AIInput : PlayerInput
 {
-    [SerializeField] private float timeBetweenTaps_Easy;
-    [SerializeField] private float timeBetweenTaps_Normal;
-    [SerializeField] private float timeBetweenTaps_Hard;
-
     [SerializeField] private AIDifficulty aiDifficulty;
 
     private bool pauseTapCount;
@@ -26,20 +16,7 @@ public class AIInput : PlayerInput
 
         pauseTapCount = true;
 
-        switch (aiDifficulty)
-        {
-            case AIDifficulty.Easy:
-                timeBetweenTaps = timeBetweenTaps_Easy;
-                break;
-
-            case AIDifficulty.Normal:
-                timeBetweenTaps = timeBetweenTaps_Normal;
-                break;
-
-            case AIDifficulty.Hard:
-                timeBetweenTaps = timeBetweenTaps_Hard;
-                break;
-        }
+        timeBetweenTaps = AIDifficultyManager.Instance.GetTimeBetweenTaps();
 
         ClearScore();
     }
