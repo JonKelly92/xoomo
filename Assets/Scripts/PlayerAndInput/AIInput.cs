@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class AIInput : PlayerInput
 {
     [SerializeField] private AIDifficulty aiDifficulty;

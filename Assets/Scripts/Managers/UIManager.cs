@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private Button restartButton;
     [SerializeField] private Button exitButton;
+    [SerializeField] private TextMeshProUGUI winnersName;
 
     [SerializeField] private GameObject fightBarRed;
     [SerializeField] private GameObject fightBarBlue;
@@ -102,7 +103,15 @@ public class UIManager : MonoBehaviour
         preGameTimer.SetText(formattedTime);
     }
 
-    private void EventManager_OnGameOver(PlayerSide location) => gameOverPanel.SetActive(true);
+    private void EventManager_OnGameOver(PlayerSide location)
+    {
+        if (location == PlayerSide.Left)
+            winnersName.text = "You Win!";
+        else
+            winnersName.text = "CPU Wins";
+
+        gameOverPanel.SetActive(true);
+    }
 
     private void RestartGame() => EventManager.RestartGame();
     private void ExitToMainMenu() => EventManager.ExitToMainMenu();
