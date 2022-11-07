@@ -3,20 +3,34 @@ using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
-    [SerializeField] private Button singlePlayerButton;
+    [SerializeField] private Button startBtn;
+    [SerializeField] private Button tutorialBtn;
+    [SerializeField] private Button difficultyBtn;
 
     private void Awake()
     {
-        singlePlayerButton.onClick.AddListener(SinglePlayerButtonPress);
+        startBtn.onClick.AddListener(StartBtnPress);
+        startBtn.onClick.AddListener(TutorialBtnPress);
+        startBtn.onClick.AddListener(DifficultyBtnPress);
     }
 
     private void OnDestroy()
     {
-        singlePlayerButton.onClick.RemoveAllListeners();
+        startBtn.onClick.RemoveAllListeners();
+        tutorialBtn.onClick.RemoveAllListeners();
+        difficultyBtn.onClick.RemoveAllListeners();
     }
 
-    private void SinglePlayerButtonPress()
+    private void StartBtnPress()
     {
        SceneTransitionManager.Instance.SwitchScene(SceneStates.GameScene);
+    }
+
+    private void TutorialBtnPress()
+    {
+    }
+
+    private void DifficultyBtnPress()
+    {
     }
 }
