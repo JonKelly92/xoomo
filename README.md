@@ -1,5 +1,5 @@
 # xoomo
-A sumo fighting game. Created as a game dev portfolio piece.
+This is my second solo Unity project. It's a fast paced sumo wrestling game. 
 
 I personally wrote all of the code in this project and created all of the art assets.
 
