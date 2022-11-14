@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum GameplayState
 {
@@ -18,16 +17,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] int roundScoreCap = 130; // when a player reaches this score the round ends and the game play state is changed (swithcing from center to left/right or from left/right to center)
-    [SerializeField] int preGameTimer = 3;
-    [SerializeField] int gamePlayTimer = 45;
+    [SerializeField] private int _roundScoreCap = 130; // when a player reaches this score the round ends and the game play state is changed (swithcing from center to left/right or from left/right to center)
+    [SerializeField] private int _preGameTimer = 3;
+    [SerializeField] private int _gamePlayTimer = 45;
 
-    [SerializeField] private PlayerObject HumanPlayerPrefab;
-    [SerializeField] private PlayerObject AIPlayerPrefab;
+    [SerializeField] private PlayerObject _humanPlayerPrefab;
+    [SerializeField] private PlayerObject _aiPlayerPrefab;
 
-    private GameplayState currentGamePlayState;
+    private GameplayState _currentGamePlayState;
 
-    public int RoundScoreCap { get { return roundScoreCap; } }
+    public int RoundScoreCap { get { return _roundScoreCap; } }
 
     private void Awake()
     {
@@ -36,12 +35,12 @@ public class GameManager : MonoBehaviour
         else
             Instance = this;
 
-        PlayerObject playerLeft = Instantiate(HumanPlayerPrefab, Vector3.zero, Quaternion.identity);
+        PlayerObject playerLeft = Instantiate(_humanPlayerPrefab, Vector3.zero, Quaternion.identity);
        // PlayerObject playerLeft = leftPlayerObject.GetComponent<PlayerObject>();
         if (playerLeft != null)
             playerLeft.Location = PlayerSide.Left;
 
-        PlayerObject playerRight = Instantiate(AIPlayerPrefab, Vector3.zero, Quaternion.identity);
+        PlayerObject playerRight = Instantiate(_aiPlayerPrefab, Vector3.zero, Quaternion.identity);
        // PlayerObject playerRight = rightPlayerObject.GetComponent<PlayerObject>();
         if (playerRight != null)
             playerRight.Location = PlayerSide.Right;
@@ -55,7 +54,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        EventManager.PreGameTimerStart(preGameTimer);
+        EventManager.PreGameTimerStart(_preGameTimer);
     }
 
     private void OnDestroy()
@@ -74,33 +73,33 @@ public class GameManager : MonoBehaviour
 
     private void StartNewGame()
     {
-        EventManager.ScoreCapSet(roundScoreCap); ;
+        EventManager.ScoreCapSet(_roundScoreCap); ;
         SetGamePlayState(GameplayState.Center);
-        EventManager.GamePlayTimerStart(gamePlayTimer);
+        EventManager.GamePlayTimerStart(_gamePlayTimer);
     }
 
     private void SetGamePlayState(GameplayState state)
     {
-        currentGamePlayState = state;
+        _currentGamePlayState = state;
         EventManager.GameplayStateChanged(state);
     }
 
     private void EventManager_OnScoreCapReached(PlayerSide playerSide)
     {
-        if (currentGamePlayState == GameplayState.Center)
+        if (_currentGamePlayState == GameplayState.Center)
         {
             if (playerSide == PlayerSide.Left)// Left player won the round so we move to the right for the next round
                 SetGamePlayState(GameplayState.Right);
             else
                 SetGamePlayState(GameplayState.Left);
         }
-        else if (currentGamePlayState == GameplayState.Right || currentGamePlayState == GameplayState.Left)
+        else if (_currentGamePlayState == GameplayState.Right || _currentGamePlayState == GameplayState.Left)
         {
             // if the current game play state is Left (right player has advantage)
             // && the location being passed is Right (right player also won the current round)
             // then the Right player has won the match
-            if (currentGamePlayState == GameplayState.Left && playerSide == PlayerSide.Right ||
-                currentGamePlayState == GameplayState.Right && playerSide == PlayerSide.Left)
+            if (_currentGamePlayState == GameplayState.Left && playerSide == PlayerSide.Right ||
+                _currentGamePlayState == GameplayState.Right && playerSide == PlayerSide.Left)
             {
                 EventManager.GameOver(playerSide);
             }

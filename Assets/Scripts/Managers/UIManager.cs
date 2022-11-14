@@ -8,27 +8,27 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private Button restartButton;
-    [SerializeField] private Button exitButton;
-    [SerializeField] private TextMeshProUGUI winnersName;
+    [SerializeField] private GameObject _gameOverPanel;
+    [SerializeField] private Button _restartButton;
+    [SerializeField] private Button _exitButton;
+    [SerializeField] private TextMeshProUGUI _winnersName;
 
-    [SerializeField] private GameObject fightBarRed;
-    [SerializeField] private GameObject fightBarBlue;
+    [SerializeField] private GameObject _fightBarRed;
+    [SerializeField] private GameObject _fightBarBlue;
 
-    [SerializeField] private TextMeshProUGUI overallScore_LeftPlayer;
-    [SerializeField] private TextMeshProUGUI overallScore_RightPlayer;
+    [SerializeField] private TextMeshProUGUI _overallScoreLeftPlayer;
+    [SerializeField] private TextMeshProUGUI _overallScoreRightPlayer;
 
-    [SerializeField] private Button leftButton;
-    [SerializeField] private Button rightButton;
+    [SerializeField] private Button _leftButton;
+    [SerializeField] private Button _rightButton;
 
-    [SerializeField] private TextMeshProUGUI preGameTimer; // this timer counts the seconds until the game starts
-    [SerializeField] private TextMeshProUGUI gameplayTimer; // this timer counts the seconds until the game ends
+    [SerializeField] private TextMeshProUGUI _preGameTimer; // this timer counts the seconds until the game starts
+    [SerializeField] private TextMeshProUGUI _gameplayTimer; // this timer counts the seconds until the game ends
 
     [SerializeField] private UnityEvent OnStartPreGameTimer;
     [SerializeField] private UnityEvent OnGameplayStart;
 
-    private GameplayState gameplayState;
+    private GameplayState _gameplayState;
 
     private void Awake()
     {
@@ -43,10 +43,10 @@ public class UIManager : MonoBehaviour
         EventManager.OnGameOver += EventManager_OnGameOver;
         EventManager.OnPreGameTimerEnd += EventManager_OnPreGameTimerEnd;
 
-        leftButton.onClick.AddListener(LeftBtnPress);
-        rightButton.onClick.AddListener(RightBtnPress);
-        restartButton.onClick.AddListener(RestartGame);
-        exitButton.onClick.AddListener(ExitToMainMenu);
+        _leftButton.onClick.AddListener(LeftBtnPress);
+        _rightButton.onClick.AddListener(RightBtnPress);
+        _restartButton.onClick.AddListener(RestartGame);
+        _exitButton.onClick.AddListener(ExitToMainMenu);
     }
 
     private void OnDestroy()
@@ -57,10 +57,10 @@ public class UIManager : MonoBehaviour
         EventManager.OnGameOver -= EventManager_OnGameOver;
         EventManager.OnPreGameTimerEnd -= EventManager_OnPreGameTimerEnd;
 
-        leftButton.onClick.RemoveAllListeners();
-        rightButton.onClick.RemoveAllListeners();
-        restartButton.onClick.RemoveAllListeners();
-        exitButton.onClick.RemoveAllListeners();
+        _leftButton.onClick.RemoveAllListeners();
+        _rightButton.onClick.RemoveAllListeners();
+        _restartButton.onClick.RemoveAllListeners();
+        _exitButton.onClick.RemoveAllListeners();
     }
 
     private void EventManager_OnPreGameTimerEnd()
@@ -71,15 +71,15 @@ public class UIManager : MonoBehaviour
 
     private void EventManager_OnGameplayStateChanged(GameplayState state)
     {
-        gameplayState = state;
+        _gameplayState = state;
     }
 
     private void EventManager_OnOverallScoreUpdate(int overallScore, PlayerSide location)
     {
         if (location == PlayerSide.Left)
-            overallScore_LeftPlayer.text = overallScore.ToString();
+            _overallScoreLeftPlayer.text = overallScore.ToString();
         else
-            overallScore_RightPlayer.text = overallScore.ToString();
+            _overallScoreRightPlayer.text = overallScore.ToString();
 
     }
     private void EventManager_OnTapScoreUpdate(int tapScoreLeft, int tapScoreRight)
@@ -87,30 +87,30 @@ public class UIManager : MonoBehaviour
         float scoreCap = GameManager.Instance.RoundScoreCap;
 
         float scorePercentage = Math.Clamp((tapScoreLeft / scoreCap), 0, 1);
-        fightBarRed.transform.localScale = new Vector3(scorePercentage, 1, 1);
+        _fightBarRed.transform.localScale = new Vector3(scorePercentage, 1, 1);
 
         scorePercentage = Math.Clamp((tapScoreRight / scoreCap), 0, 1);
-        fightBarBlue.transform.localScale = new Vector3(scorePercentage, 1, 1);
+        _fightBarBlue.transform.localScale = new Vector3(scorePercentage, 1, 1);
     }
 
     public void UpdateGameplayTimer(string formattedTime)
     {
-        gameplayTimer.SetText(formattedTime);
+        _gameplayTimer.SetText(formattedTime);
     }
 
     public void UpdatePreGameTimer(string formattedTime)
     {
-        preGameTimer.SetText(formattedTime);
+        _preGameTimer.SetText(formattedTime);
     }
 
     private void EventManager_OnGameOver(PlayerSide location)
     {
         if (location == PlayerSide.Left)
-            winnersName.text = "You Win!";
+            _winnersName.text = "You Win!";
         else
-            winnersName.text = "CPU Wins";
+            _winnersName.text = "CPU Wins";
 
-        gameOverPanel.SetActive(true);
+        _gameOverPanel.SetActive(true);
     }
 
     private void RestartGame() => EventManager.RestartGame();

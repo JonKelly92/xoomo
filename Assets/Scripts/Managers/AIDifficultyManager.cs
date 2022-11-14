@@ -11,13 +11,13 @@ public class AIDifficultyManager : MonoBehaviour
 {
     static public AIDifficultyManager Instance { get; internal set; }
 
-    private float timeBetweenTaps_Easy = 0.4f;
-    private float timeBetweenTaps_Normal = 0.25f;
-    private float timeBetweenTaps_Hard = 0.1f;
+    private float _timeBetweenTaps_Easy = 0.4f;
+    private float _timeBetweenTaps_Normal = 0.25f;
+    private float _timeBetweenTaps_Hard = 0.1f;
 
-    private AIDifficulty currentDifficulty;
+    private AIDifficulty _currentDifficulty;
 
-    private string playerPrefKey = "Difficulty";
+    private const string PlayerPrefKey = "Difficulty";
 
     private void Awake()
     {
@@ -33,17 +33,17 @@ public class AIDifficultyManager : MonoBehaviour
 
     public AIDifficulty GetDifficulty ()
     {
-        int difficulty = PlayerPrefs.GetInt(playerPrefKey, 2);
+        int difficulty = PlayerPrefs.GetInt(PlayerPrefKey, 2);
 
-        currentDifficulty = (AIDifficulty)difficulty;
+        _currentDifficulty = (AIDifficulty)difficulty;
 
-        return currentDifficulty;
+        return _currentDifficulty;
     }
 
     public void SetDifficulty (AIDifficulty difficulty)
     {
-        PlayerPrefs.SetInt(playerPrefKey, (int)difficulty);
-        currentDifficulty = difficulty;
+        PlayerPrefs.SetInt(PlayerPrefKey, (int)difficulty);
+        _currentDifficulty = difficulty;
     }
 
     /// <summary>
@@ -53,18 +53,18 @@ public class AIDifficultyManager : MonoBehaviour
     {
         float timeBetweenTaps = 0f;
 
-        switch (currentDifficulty)
+        switch (_currentDifficulty)
         {
             case AIDifficulty.Easy:
-                timeBetweenTaps = timeBetweenTaps_Easy;
+                timeBetweenTaps = _timeBetweenTaps_Easy;
                 break;
 
             case AIDifficulty.Normal:
-                timeBetweenTaps = timeBetweenTaps_Normal;
+                timeBetweenTaps = _timeBetweenTaps_Normal;
                 break;
 
             case AIDifficulty.Hard:
-                timeBetweenTaps = timeBetweenTaps_Hard;
+                timeBetweenTaps = _timeBetweenTaps_Hard;
                 break;
         }
 

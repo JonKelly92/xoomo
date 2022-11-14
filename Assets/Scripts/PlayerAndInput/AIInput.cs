@@ -2,20 +2,18 @@ using UnityEngine;
 
 public class AIInput : PlayerInput
 {
-    [SerializeField] private AIDifficulty aiDifficulty;
+    private bool _pauseTapCount;
 
-    private bool pauseTapCount;
-
-    private float timeBetweenTaps;
-    private float timeSinceScoreWasSent;
+    private float _timeBetweenTaps;
+    private float _timeSinceScoreWasSent;
 
     protected override void Start()
     {
         base.Start();
 
-        pauseTapCount = true;
+        _pauseTapCount = true;
 
-        timeBetweenTaps = AIDifficultyManager.Instance.GetTimeBetweenTaps();
+        _timeBetweenTaps = AIDifficultyManager.Instance.GetTimeBetweenTaps();
 
         ClearScore();
     }
@@ -23,14 +21,14 @@ public class AIInput : PlayerInput
     private void FixedUpdate()
     {
         // block "input", primarily for when rounds are changing and animations are happening
-        if (pauseTapCount)
+        if (_pauseTapCount)
             return;
 
-        timeSinceScoreWasSent -= Time.deltaTime;
+        _timeSinceScoreWasSent -= Time.deltaTime;
 
-        if (timeSinceScoreWasSent <= 0)
+        if (_timeSinceScoreWasSent <= 0)
         {
-            totalTapCount = Random.Range(1, 3);
+            TotalTapCount = Random.Range(1, 3);
             SendTapInput();
             ClearScore();
         }
@@ -40,18 +38,18 @@ public class AIInput : PlayerInput
     protected override void EventManager_OnGameplayStateChanged(GameplayState obj)
     {
         ClearScore();
-        pauseTapCount = false;
+        _pauseTapCount = false;
     }
 
-    protected override void EventManager_OnScoreCapReached(PlayerSide obj) => pauseTapCount = true;
+    protected override void EventManager_OnScoreCapReached(PlayerSide obj) => _pauseTapCount = true;
 
-    protected override void SendTapInput() => playerObject.SendTapCountEvent(totalTapCount);
+    protected override void SendTapInput() => PlayerObject.SendTapCountEvent(TotalTapCount);
 
     protected override void ClearScore()
     {
-        totalTapCount = 0;
-        timeSinceScoreWasSent = timeBetweenTaps;
+        TotalTapCount = 0;
+        _timeSinceScoreWasSent = _timeBetweenTaps;
     }
 
-    protected override void EventManager_OnGameOver(PlayerSide obj) => pauseTapCount = true;
+    protected override void EventManager_OnGameOver(PlayerSide obj) => _pauseTapCount = true;
 }

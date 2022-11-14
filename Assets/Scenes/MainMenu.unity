@@ -3701,12 +3701,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71752ceb415f2a841a3b0f54f6cc33db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startBtn: {fileID: 1413191586}
-  difficultyBtn: {fileID: 1868494170}
-  difficultyPanel: {fileID: 1907705138}
-  easyBtn: {fileID: 1856060563}
-  normalBtn: {fileID: 1025412786}
-  hardBtn: {fileID: 1734178197}
+  _startBtn: {fileID: 1413191586}
+  _difficultyBtn: {fileID: 1868494170}
+  _difficultyPanel: {fileID: 1907705138}
+  _easyBtn: {fileID: 1856060563}
+  _normalBtn: {fileID: 1025412786}
+  _hardBtn: {fileID: 1734178197}
 --- !u!1 &1631198154
 GameObject:
   m_ObjectHideFlags: 0

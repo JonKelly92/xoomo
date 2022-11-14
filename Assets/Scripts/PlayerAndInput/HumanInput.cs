@@ -9,9 +9,9 @@ public class HumanInput : PlayerInput
         None = 3
     }
 
-    private int leftTapCount;
-    private int rightTapCount;
-    private AcceptInputFrom activeButton;
+    private int _leftTapCount;
+    private int _rightTapCount;
+    private AcceptInputFrom _activeButton;
 
     protected override void Awake()
     {
@@ -21,7 +21,7 @@ public class HumanInput : PlayerInput
         EventManager.OnRightButtonPressed += RightBtnPress;
 
         ClearScore();
-        activeButton = AcceptInputFrom.None;
+        _activeButton = AcceptInputFrom.None;
     }
 
     protected override void OnDestroy()
@@ -33,29 +33,29 @@ public class HumanInput : PlayerInput
     }
 
     // Round has ended and the new game play state is being chosen, block input while this is happening
-    protected override void EventManager_OnScoreCapReached(PlayerSide obj) => activeButton = AcceptInputFrom.None;
+    protected override void EventManager_OnScoreCapReached(PlayerSide obj) => _activeButton = AcceptInputFrom.None;
 
     // A new round is starting
     protected override void EventManager_OnGameplayStateChanged(GameplayState state)
     {
         ClearScore();
 
-        gamePlayState = state;
+        GamePlayState = state;
 
         // Setting the state now so we can immediately start recieving input
-        switch (gamePlayState)
+        switch (GamePlayState)
         {
             case GameplayState.Left:
-                activeButton = AcceptInputFrom.LeftBtn;
+                _activeButton = AcceptInputFrom.LeftBtn;
                 break;
             case GameplayState.Right:
-                activeButton = AcceptInputFrom.RightBtn;
+                _activeButton = AcceptInputFrom.RightBtn;
                 break;
             case GameplayState.Center:
-                activeButton = AcceptInputFrom.LeftBtn;
+                _activeButton = AcceptInputFrom.LeftBtn;
                 break;
             default:
-                activeButton = AcceptInputFrom.None;
+                _activeButton = AcceptInputFrom.None;
                 break;
 
         }
@@ -64,7 +64,7 @@ public class HumanInput : PlayerInput
     private void FixedUpdate()
     {
         // block all input
-        if (activeButton == AcceptInputFrom.None)
+        if (_activeButton == AcceptInputFrom.None)
             return;
 
         // DEBUG -----------------------------
@@ -75,64 +75,64 @@ public class HumanInput : PlayerInput
         //----------------------------------------
 
 
-        if (gamePlayState == GameplayState.Left)
+        if (GamePlayState == GameplayState.Left)
         {
-            totalTapCount += leftTapCount;
-            leftTapCount = 0;
+            TotalTapCount += _leftTapCount;
+            _leftTapCount = 0;
         }
-        else if (gamePlayState == GameplayState.Right)
+        else if (GamePlayState == GameplayState.Right)
         {
-            totalTapCount += rightTapCount;
-            rightTapCount = 0;
+            TotalTapCount += _rightTapCount;
+            _rightTapCount = 0;
         }
         // In the Center state the player needs to alternate between pressing the Left and Right buttons
-        else if (gamePlayState == GameplayState.Center)
+        else if (GamePlayState == GameplayState.Center)
         {
-            if (activeButton == AcceptInputFrom.LeftBtn)
+            if (_activeButton == AcceptInputFrom.LeftBtn)
             {
-                totalTapCount += leftTapCount;
+                TotalTapCount += _leftTapCount;
 
                 // only switch to getting input from the right button if the left button was pressed
-                if (leftTapCount > 0)
-                    activeButton = AcceptInputFrom.RightBtn;
+                if (_leftTapCount > 0)
+                    _activeButton = AcceptInputFrom.RightBtn;
             }
             else
             {
-                totalTapCount += rightTapCount;
+                TotalTapCount += _rightTapCount;
 
-                if (rightTapCount > 0)
-                    activeButton = AcceptInputFrom.LeftBtn;
+                if (_rightTapCount > 0)
+                    _activeButton = AcceptInputFrom.LeftBtn;
             }
 
-            leftTapCount = 0;
-            rightTapCount = 0;
+            _leftTapCount = 0;
+            _rightTapCount = 0;
         }
 
-        if (totalTapCount > 0)
+        if (TotalTapCount > 0)
         {
             SendTapInput();
             ClearScore();
         }
     }
 
-    protected override void SendTapInput() => playerObject.SendTapCountEvent(totalTapCount);
+    protected override void SendTapInput() => PlayerObject.SendTapCountEvent(TotalTapCount);
 
     private void LeftBtnPress()
     {
-        leftTapCount++;
+        _leftTapCount++;
     }
 
     private void RightBtnPress()
     {
-        rightTapCount++;
+        _rightTapCount++;
     }
 
     protected override void ClearScore()
     {
-        totalTapCount = 0;
-        leftTapCount = 0;
-        rightTapCount = 0;
+        TotalTapCount = 0;
+        _leftTapCount = 0;
+        _rightTapCount = 0;
     }
 
-    protected override void EventManager_OnGameOver(PlayerSide obj) => activeButton = AcceptInputFrom.None;
+    protected override void EventManager_OnGameOver(PlayerSide obj) => _activeButton = AcceptInputFrom.None;
 }

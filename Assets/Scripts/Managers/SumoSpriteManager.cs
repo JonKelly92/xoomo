@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class SumoSpriteManager : MonoBehaviour
 {
-    [SerializeField] private GameObject sumoStart;
-    [SerializeField] private GameObject sumoCenter;
-    [SerializeField] private GameObject sumoLeft;
-    [SerializeField] private GameObject sumoRight;
+    [SerializeField] private GameObject _sumoStart;
+    [SerializeField] private GameObject _sumoCenter;
+    [SerializeField] private GameObject _sumoLeft;
+    [SerializeField] private GameObject _sumoRight;
 
     private void Awake()
     {
         EventManager.OnGameplayStateChanged += EventManager_OnGameplayStateChanged;
 
-        sumoStart.SetActive(true);
+        _sumoStart.SetActive(true);
     }
 
     private void OnDestroy()
@@ -21,24 +21,24 @@ public class SumoSpriteManager : MonoBehaviour
 
     private void EventManager_OnGameplayStateChanged(GameplayState state)
     {
-        sumoStart.SetActive(false);
-        sumoCenter.SetActive(false);
-        sumoLeft.SetActive(false);
-        sumoRight.SetActive(false);
+        _sumoStart.SetActive(false);
+        _sumoCenter.SetActive(false);
+        _sumoLeft.SetActive(false);
+        _sumoRight.SetActive(false);
 
         switch (state)
         {
             case GameplayState.Left:
-                sumoLeft.SetActive(true);
+                _sumoLeft.SetActive(true);
                 break;
             case GameplayState.Right:
-                sumoRight.SetActive(true);
+                _sumoRight.SetActive(true);
                 break;
             case GameplayState.Center:
-                sumoCenter.SetActive(true);
+                _sumoCenter.SetActive(true);
                 break;
             default:
-                sumoStart.SetActive(true);
+                _sumoStart.SetActive(true);
                 break;
 
         }

@@ -2,10 +2,10 @@ using UnityEngine;
 
 public abstract class PlayerInput : MonoBehaviour
 {
-    protected int totalTapCount;
-    protected PlayerObject playerObject;
+    protected int TotalTapCount;
+    protected PlayerObject PlayerObject;
 
-    protected GameplayState gamePlayState;
+    protected GameplayState GamePlayState;
 
     protected virtual void Awake()
     {
@@ -16,9 +16,9 @@ public abstract class PlayerInput : MonoBehaviour
 
     protected virtual void Start()
     {
-        playerObject = gameObject.GetComponent<PlayerObject>();
+        PlayerObject = gameObject.GetComponent<PlayerObject>();
 
-        if (playerObject == null)
+        if (PlayerObject == null)
             Debug.LogError("PlayerObject is null");
     }
 

@@ -3,33 +3,33 @@ using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
-    [SerializeField] private Button startBtn;
-    [SerializeField] private Button difficultyBtn;
+    [SerializeField] private Button _startBtn;
+    [SerializeField] private Button _difficultyBtn;
 
-    [SerializeField] private GameObject difficultyPanel;
+    [SerializeField] private GameObject _difficultyPanel;
 
-    [SerializeField] private Button easyBtn;
-    [SerializeField] private Button normalBtn;
-    [SerializeField] private Button hardBtn;
+    [SerializeField] private Button _easyBtn;
+    [SerializeField] private Button _normalBtn;
+    [SerializeField] private Button _hardBtn;
 
     private void Awake()
     {
-        startBtn.onClick.AddListener(StartBtnPress);
-        difficultyBtn.onClick.AddListener(DifficultyBtnPress);
+        _startBtn.onClick.AddListener(StartBtnPress);
+        _difficultyBtn.onClick.AddListener(DifficultyBtnPress);
 
-        easyBtn.onClick.AddListener(EasySelected);
-        normalBtn.onClick.AddListener(NormalSelected);
-        hardBtn.onClick.AddListener(HardSelected);
+        _easyBtn.onClick.AddListener(EasySelected);
+        _normalBtn.onClick.AddListener(NormalSelected);
+        _hardBtn.onClick.AddListener(HardSelected);
     }
 
     private void OnDestroy()
     {
-        startBtn.onClick.RemoveAllListeners();
-        difficultyBtn.onClick.RemoveAllListeners();
+        _startBtn.onClick.RemoveAllListeners();
+        _difficultyBtn.onClick.RemoveAllListeners();
 
-        easyBtn.onClick.RemoveAllListeners();
-        normalBtn.onClick.RemoveAllListeners();
-        hardBtn.onClick.RemoveAllListeners();
+        _easyBtn.onClick.RemoveAllListeners();
+        _normalBtn.onClick.RemoveAllListeners();
+        _hardBtn.onClick.RemoveAllListeners();
     }
 
     private void StartBtnPress()
@@ -44,17 +44,17 @@ public class MainMenuManager : MonoBehaviour
         switch (difficulty)
         {
             case AIDifficulty.Easy:
-                easyBtn.interactable = false;
+                _easyBtn.interactable = false;
                 break;
             case AIDifficulty.Normal:
-                normalBtn.interactable = false;
+                _normalBtn.interactable = false;
                 break;
             case AIDifficulty.Hard:
-                hardBtn.interactable = false;
+                _hardBtn.interactable = false;
                 break;
         }
 
-        difficultyPanel.SetActive(true);
+        _difficultyPanel.SetActive(true);
     }
 
     private void EasySelected() => AIDifficultyManager.Instance.SetDifficulty(AIDifficulty.Easy);
