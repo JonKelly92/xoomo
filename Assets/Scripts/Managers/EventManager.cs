@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class EventManager : MonoBehaviour
+public static class EventManager// : MonoBehaviour
 {
     // SCORE
     public static event Action<int> OnScoreCapSet; // the max score that players are trying to achieve each round has been set

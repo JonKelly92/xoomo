@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] int preGameTimer = 3;
     [SerializeField] int gamePlayTimer = 45;
 
-    [SerializeField] private GameObject HumanPlayerPrefab;
-    [SerializeField] private GameObject AIPlayerPrefab;
+    [SerializeField] private PlayerObject HumanPlayerPrefab;
+    [SerializeField] private PlayerObject AIPlayerPrefab;
 
     private GameplayState currentGamePlayState;
 
@@ -36,13 +36,13 @@ public class GameManager : MonoBehaviour
         else
             Instance = this;
 
-        GameObject leftPlayerObject = Instantiate(HumanPlayerPrefab, Vector3.zero, Quaternion.identity);
-        PlayerObject playerLeft = leftPlayerObject.GetComponent<PlayerObject>();
+        PlayerObject playerLeft = Instantiate(HumanPlayerPrefab, Vector3.zero, Quaternion.identity);
+       // PlayerObject playerLeft = leftPlayerObject.GetComponent<PlayerObject>();
         if (playerLeft != null)
             playerLeft.Location = PlayerSide.Left;
 
-        GameObject rightPlayerObject = Instantiate(AIPlayerPrefab, Vector3.zero, Quaternion.identity);
-        PlayerObject playerRight = rightPlayerObject.GetComponent<PlayerObject>();
+        PlayerObject playerRight = Instantiate(AIPlayerPrefab, Vector3.zero, Quaternion.identity);
+       // PlayerObject playerRight = rightPlayerObject.GetComponent<PlayerObject>();
         if (playerRight != null)
             playerRight.Location = PlayerSide.Right;
 
