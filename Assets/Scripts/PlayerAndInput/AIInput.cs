@@ -41,8 +41,6 @@ public class AIInput : PlayerInput
         _pauseTapCount = false;
     }
 
-    protected override void EventManager_OnScoreCapReached(PlayerSide obj) => _pauseTapCount = true;
-
     protected override void SendTapInput() => PlayerObject.SendTapCountEvent(TotalTapCount);
 
     protected override void ClearScore()

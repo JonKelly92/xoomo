@@ -12,7 +12,7 @@ public class PlayerValues
     {
         CurrentTapScore = 0;
         OverallScore = 0;
-        this.PlayerSide = playerSide;
+        PlayerSide = playerSide;
     }
 }
 
@@ -51,7 +51,7 @@ public class ScoreManager : MonoBehaviour
         EventManager.OnGameplayStateChanged -= EventManager_OnGameplayStateChanged;
     }
 
-    private void EventManager_OnScoreCapSet(int scoreCap) => this._scoreCap = scoreCap;
+    private void EventManager_OnScoreCapSet(int scoreCap) => _scoreCap = scoreCap;
 
     private void EventManager_OnSendingTapCount(int tapCount, PlayerSide location)
     {

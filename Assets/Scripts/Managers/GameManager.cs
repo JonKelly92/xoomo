@@ -21,9 +21,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _preGameTimer = 3;
     [SerializeField] private int _gamePlayTimer = 45;
 
-    [SerializeField] private PlayerObject _humanPlayerPrefab;
-    [SerializeField] private PlayerObject _aiPlayerPrefab;
-
     private GameplayState _currentGamePlayState;
 
     public int RoundScoreCap { get { return _roundScoreCap; } }
@@ -35,16 +32,6 @@ public class GameManager : MonoBehaviour
         else
             Instance = this;
 
-        PlayerObject playerLeft = Instantiate(_humanPlayerPrefab, Vector3.zero, Quaternion.identity);
-       // PlayerObject playerLeft = leftPlayerObject.GetComponent<PlayerObject>();
-        if (playerLeft != null)
-            playerLeft.Location = PlayerSide.Left;
-
-        PlayerObject playerRight = Instantiate(_aiPlayerPrefab, Vector3.zero, Quaternion.identity);
-       // PlayerObject playerRight = rightPlayerObject.GetComponent<PlayerObject>();
-        if (playerRight != null)
-            playerRight.Location = PlayerSide.Right;
-
         EventManager.OnScoreCapReached += EventManager_OnScoreCapReached;
         EventManager.OnRestartGame += EventManager_OnRestartGame;
         EventManager.OnExitToMainMenu += EventManager_OnExitToMainMenu;
@@ -54,6 +41,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        PlayerFactory.Instance.CreateHumanPlayer(PlayerSide.Left);
+        PlayerFactory.Instance.CreateAIPlayer(PlayerSide.Right);
+
         EventManager.PreGameTimerStart(_preGameTimer);
     }
 

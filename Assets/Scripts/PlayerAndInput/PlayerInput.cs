@@ -9,7 +9,6 @@ public abstract class PlayerInput : MonoBehaviour
 
     protected virtual void Awake()
     {
-        EventManager.OnScoreCapReached += EventManager_OnScoreCapReached;
         EventManager.OnGameOver += EventManager_OnGameOver;
         EventManager.OnGameplayStateChanged += EventManager_OnGameplayStateChanged;
     }
@@ -24,14 +23,11 @@ public abstract class PlayerInput : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        EventManager.OnScoreCapReached -= EventManager_OnScoreCapReached;
         EventManager.OnGameOver -= EventManager_OnGameOver;
         EventManager.OnGameplayStateChanged -= EventManager_OnGameplayStateChanged;
     }
 
     protected abstract void EventManager_OnGameplayStateChanged(GameplayState obj);
-
-    protected abstract void EventManager_OnScoreCapReached(PlayerSide obj);
 
     protected abstract void EventManager_OnGameOver(PlayerSide obj);
 
